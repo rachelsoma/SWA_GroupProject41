@@ -82,6 +82,8 @@ corpus = tm_map(corpus, tolower)
 corpus = tm_map(corpus, stemDocument)
 corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far","quot","look","take","make"))
 
+
+
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
 tweet.matrix = as.matrix(tweet.wdtm)
@@ -92,8 +94,7 @@ tweet.matrix = as.matrix(tweet.wdtm)
 ```{r}
 freqs=colSums(tweet.matrix)
 
-wordcloud(names(freqs),freqs,scale=c(2,0.5),random.order = FALSE,use.r.layout=FALSE,
-                  colors=brewer.pal(8, "Dark2"),min.freq = 3)
+##wordcloud(names(freqs),freqs,scale=c(2,0.5),random.order = FALSE,use.r.layout=FALSE, colors=brewer.pal(8, "Dark2"),min.freq = 3)
 
 data = data.frame(names(freqs), freqs)
 wordcloud2(data, size = 0.3, shape = "circle")
@@ -131,11 +132,11 @@ id2 = order(freqs, decreasing = TRUE)[1:50]
  D = dist(freqs[id2])
 
 h.complete = hclust(D)
-h.complete <- color_branches(h.complete, k = 8)
+h.complete <- color_branches(h.complete, k = 4)
 plot(h.complete,main = "Complete")
 
 h.single = hclust(D, method="single")
-h.single <- color_branches(h.single, k = 8)
+h.single <- color_branches(h.single, k = 4)
 plot(h.single,main = "Single")
 
 ```
