@@ -44,6 +44,12 @@ In this section, we want to examine the language used in tweets. Use the rtweet 
 1.       Use the search_tweets function from the rtweet library to search for 1000 tweets about the person you selected. Save these tweets as "tweets".
 
 ```{r}
+library("ROAuth")
+library("tm")
+library("wordcloud")
+library("rtweet")
+library("twitteR")
+
 key="3g0mNQkwVxe0JKiRfSyyS0rvu"
 secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
 access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
