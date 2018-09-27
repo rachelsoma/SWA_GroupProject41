@@ -71,12 +71,13 @@ corpus=Corpus(VectorSource(tweets$text))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'ASCII', sub = ' '))
 corpus = tm_map(corpus,removeNumbers)
-##corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co","rowling","jkrowling"))
+
 corpus = tm_map(corpus,removePunctuation)
 corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
+
 corpus = tm_map(corpus, stemDocument)
-corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co", "rowling", "quot", "jkrowl"))
+corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl"))
 
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
