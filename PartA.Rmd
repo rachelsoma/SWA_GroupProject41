@@ -29,12 +29,12 @@ below, declare that:
   considers to be academic misconduct, and that we are aware of the
   penalties that may be imposed for academic misconduct.
 
-Name               | Student Number | Contribution (%)
--------------------|----------------|-----------------
-                   |                |
-                   |                |
-                   |                |
-                   |                |
+Name                  | Student Number  | Contribution (%)
+----------------------|-----------------|-----------------
+Rachel Hardie         |                 |
+Dylan Wang            |                 |
+Dylan Yoo             |                 |
+Sreenath Ramachandran |                 | 
 
 <div style="page-break-before:always;"></div>
 
@@ -50,7 +50,7 @@ library("wordcloud")
 library("rtweet")
 library("twitteR")
 library("wordcloud2")
-install.packages("dendextend")
+#install.packages("dendextend")
 library(dendextend)
 
 
@@ -124,7 +124,7 @@ barplot(words.proportion[id], col=heat.colors(20),las=2)
 
 7.      Create a dendrogram of the words in your document term matrix. You do not need to visualize all words in your dendrogram, set up appropriate boundaries to improve the visualization.
 
-                    i.     Try simple and complete linkage clustering.
+  i.     Try simple and complete linkage clustering.
          
 ```{r}
 id2 = order(freqs, decreasing = TRUE)[1:50]
@@ -141,10 +141,11 @@ plot(h.single,main = "Single")
 
 ```
 
-                   
-                   ```
-                    ii.    Which one do you think performed better?
-                    Single linkage 
+
+  <h4>ii.    Which one do you think performed better?</h4>
+  
+  Complete Linkage is the better option as it
+ 
 
 What do these words tell us about the Person? Comment on what people are saying about this person? 
 
