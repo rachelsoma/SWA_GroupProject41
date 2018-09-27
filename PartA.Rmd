@@ -50,6 +50,9 @@ library("wordcloud")
 library("rtweet")
 library("twitteR")
 library("wordcloud2")
+install.packages("dendextend")
+library(dendextend)
+
 
 key="3g0mNQkwVxe0JKiRfSyyS0rvu"
 secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
@@ -126,18 +129,21 @@ barplot(words.proportion[id], col=heat.colors(20),las=2)
 id2 = order(freqs, decreasing = TRUE)[1:50]
                     topWords.clus = colnames(tweet.matrix)[id2]
  D = dist(freqs[id2])
-                    h.complete = hclust(D)
-                    plot(h.complete)
 
-                    h.single = hclust(D, method="single")
-                    plot(h.single)
+h.complete = hclust(D)
+h.complete <- color_branches(h.complete, k = 8)
+plot(h.complete,main = "Complete")
+
+h.single = hclust(D, method="single")
+h.single <- color_branches(h.single, k = 8)
+plot(h.single,main = "Single")
 
 ```
 
                    
                    ```
                     ii.    Which one do you think performed better?
-                    
+                    Single linkage 
 
 What do these words tell us about the Person? Comment on what people are saying about this person? 
 
