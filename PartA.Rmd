@@ -49,6 +49,7 @@ library("tm")
 library("wordcloud")
 library("rtweet")
 library("twitteR")
+library("wordcloud2")
 
 key="3g0mNQkwVxe0JKiRfSyyS0rvu"
 secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
@@ -65,12 +66,12 @@ tweets=read.csv("SWAProject.csv")
 
 2.      Construct a document-term matrix or term-document matrix using TFIDF weighting.
 
-```{r}
+```{r echo=FALSE}
 corpus=Corpus(VectorSource(tweets$text))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'ASCII', sub = ' '))
 corpus = tm_map(corpus,removeNumbers)
-corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co"))
+corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co","rowling","jkrowling"))
 corpus = tm_map(corpus,removePunctuation)
 corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
@@ -89,6 +90,9 @@ freqs=colSums(tweet.matrix)
 
 wordcloud(names(freqs),freqs,scale=c(2,0.5),random.order = FALSE,use.r.layout=FALSE,
                   colors=brewer.pal(8, "Dark2"),min.freq = 3)
+
+data = data.frame(names(freqs), freqs)
+wordcloud2(data, size = 0.3, shape = "circle")
 ```
 
 4.      Sum the frequencies of each terms in all documents to obtain a vector of term frequencies summed over all tweets.
