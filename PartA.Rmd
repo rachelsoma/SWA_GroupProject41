@@ -182,6 +182,32 @@ tweet.matrix.2d = cmdscale(D,k=2)
 plot(tweet.matrix.2d, col = K$cluster)
 ```
 3.    List the top 10 words associated with each user cluster and manually determine the type of user profiles for each cluster (e.g. journalist, organisation, personal).
+```{r}
+
+cluster.number = 1
+clusterTweetsId = which(K$cluster == cluster.number)
+clusterTweets = tweet.matrix[clusterTweetsId,]
+clusterTermWeight = colMeans(clusterTweets)
+sort(clusterTermWeight, decreasing = TRUE)[1:10]
+
+cluster.number2 = 2
+clusterTweetsId2 = which(K$cluster == cluster.number2)
+clusterTweets2 = tweet.matrix[clusterTweetsId2,]
+clusterTermWeight2 = colMeans(clusterTweets2)
+sort(clusterTermWeight2, decreasing = TRUE)[1:10]
+
+cluster.number3 = 3
+clusterTweetsId3 = which(K$cluster == cluster.number3)
+clusterTweets3 = tweet.matrix[clusterTweetsId3,]
+clusterTermWeight3 = colMeans(clusterTweets3)
+sort(clusterTermWeight3, decreasing = TRUE)[1:10]
+
+cluster.number4 = 4
+clusterTweetsId4 = which(K$cluster == cluster.number4)
+clusterTweets4 = tweet.matrix[clusterTweetsId4,]
+clusterTermWeight4 = colMeans(clusterTweets4)
+sort(clusterTermWeight4, decreasing = TRUE)[1:10]
+```
 
 4.    Comment on your findings.
 
