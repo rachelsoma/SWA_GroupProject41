@@ -131,10 +131,11 @@ barplot(words.proportion[id])
                     h.complete = hclust(D)
                     plot(h.complete)
 
-                    h.simple = hclust(D, method="single")
-                    plot(h.simple)
+                    h.single = hclust(D, method="single")
+                    plot(h.single)
                    ```
                     ii.    Which one do you think performed better?
+                    
 
 What do these words tell us about the Person? Comment on what people are saying about this person? 
 
