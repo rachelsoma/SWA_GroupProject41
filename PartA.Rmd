@@ -154,9 +154,34 @@ What do these words tell us about the Person? Comment on what people are saying 
 We want to categorize (cluster) the users of the tweets about the Public Figure based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users, built a document term matrix by using the user descriptions of the tweets you downloaded at section 1.
 
 1.     Compute the most appropriate number of clusters using the elbow method. Make sure an appropriate metric is used.
-
+```{r}
+norm.tweet.matrix = diag(1/sqrt(rowSums(tweet.matrix^2))) %*% tweet.matrix
+## then create the distance matrix
+##Cosine distance
+D = dist(norm.tweet.matrix, method = "euclidean")^2/2
+D[is.na(D)]=0
+?cmdscale
+?dist
+## perform MDS using 300 dimensions
+mds.tweet.matrix <- cmdscale(D, k=300)
+##Elbow
+SSW = rep(0,15)
+for (i in 1:15) {
+  number.of.clusters=i
+  k=kmeans(mds.tweet.matrix,number.of.clusters,nstart = 10)
+  SSW[i]=k$tot.withinss
+}
+plot(1:15,SSW,type="b")
+K = kmeans(mds.tweet.matrix,4, nstart = 10 )
+tweet.matrix.2d = cmdscale(D,k=2)
+plot(tweet.matrix.2d, col = K$cluster)
+```
 2.    Cluster the users and visualize the clusters in two dimensional vector space.
-
+```{r}
+K = kmeans(mds.tweet.matrix,4, nstart = 10 )
+tweet.matrix.2d = cmdscale(D,k=2)
+plot(tweet.matrix.2d, col = K$cluster)
+```
 3.    List the top 10 words associated with each user cluster and manually determine the type of user profiles for each cluster (e.g. journalist, organisation, personal).
 
 4.    Comment on your findings.
