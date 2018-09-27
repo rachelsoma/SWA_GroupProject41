@@ -100,6 +100,7 @@ id=order(freqs,decreasing = TRUE)[1:20]
 5.      Compute the proportion of each term in the tweets from the vector of term frequencies. Visualize the top 20 words and their proportion by using a bar plot.
 ```{r}
 topWords=colnames(tweet.matrix)[id]
+barplot(freqs[id])
 
 ```
 
