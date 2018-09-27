@@ -71,12 +71,17 @@ corpus=Corpus(VectorSource(tweets$text))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'ASCII', sub = ' '))
 corpus = tm_map(corpus,removeNumbers)
+<<<<<<< HEAD
 corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co","rowling","jkrowling"))
+=======
+>>>>>>> f34bc6ce53b9450ff274daee23889cd3a46c3b44
 corpus = tm_map(corpus,removePunctuation)
 corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
 
 corpus = tm_map(corpus, stemDocument)
+corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co", "rowling", "quot", "jkrowl"))
+
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
 tweet.matrix = as.matrix(tweet.wdtm)
@@ -98,12 +103,22 @@ wordcloud2(data, size = 0.3, shape = "circle")
 4.      Sum the frequencies of each terms in all documents to obtain a vector of term frequencies summed over all tweets.
 ```{r}
 id=order(freqs,decreasing = TRUE)[1:20]
+## freqs=colSums(tweet.matrix)
+## ^^ Calculated in question 3
 
+freqs
 ```
 
 5.      Compute the proportion of each term in the tweets from the vector of term frequencies. Visualize the top 20 words and their proportion by using a bar plot.
 ```{r}
+id=order(freqs,decreasing = TRUE)[1:20]
+
 topWords=colnames(tweet.matrix)[id]
+
+N = length(freqs)
+words.proportion = freqs/N
+
+barplot(words.proportion[id])
 
 ```
 
