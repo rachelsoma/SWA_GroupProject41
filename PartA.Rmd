@@ -53,15 +53,15 @@ library("wordcloud2")
 #install.packages("dendextend")
 library(dendextend)
 
-
-key="3g0mNQkwVxe0JKiRfSyyS0rvu"
-secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
-access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
-access_secret="g8iN8UChw7jAnybFKfMxPWiWiS8hZw1lVeKzmipnnu3zR"
-app="WSU300958"
-setup_twitter_oauth(key,secret,access_token,access_secret)
+##Code in line 57-63 is used to create the SWA project.csv file,
+## which used for the work to have a consistent set of tweets for analysis.
+#key="3g0mNQkwVxe0JKiRfSyyS0rvu"
+#secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
+#access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
+#access_secret="g8iN8UChw7jAnybFKfMxPWiWiS8hZw1lVeKzmipnnu3zR"
+#app="WSU300958"
+##setup_twitter_oauth(key,secret,access_token,access_secret)
 ## tweets=search_tweets(q="J.K.Rowling",n=1000,lang="en",include_rts = FALSE)
-## tweets$text[1:10]
 ## save_as_csv(tweets,"SWAProject.csv")
 
 tweets=read.csv("SWAProject.csv")
@@ -82,8 +82,6 @@ corpus = tm_map(corpus, tolower)
 corpus = tm_map(corpus, stemDocument)
 corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far","quot","look","take","make"))
 
-
-
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
 tweet.matrix = as.matrix(tweet.wdtm)
@@ -102,9 +100,9 @@ wordcloud2(data, size = 0.3, shape = "circle")
 
 4.      Sum the frequencies of each terms in all documents to obtain a vector of term frequencies summed over all tweets.
 ```{r}
+##term frequencies are stored in the vector 'freqs'
 ## freqs=colSums(tweet.matrix)
 ## ^^ Calculated in question 3
-
 freqs
 
 ```
@@ -112,14 +110,10 @@ freqs
 5.      Compute the proportion of each term in the tweets from the vector of term frequencies. Visualize the top 20 words and their proportion by using a bar plot.
 ```{r}
 id=order(freqs,decreasing = TRUE)[1:20]
-
 topWords=colnames(tweet.matrix)[id]
-
 N = length(freqs)
 words.proportion = freqs/N
-
 barplot(words.proportion[id], col=heat.colors(20),las=2)
-
 ```
 
 7.      Create a dendrogram of the words in your document term matrix. You do not need to visualize all words in your dendrogram, set up appropriate boundaries to improve the visualization.
@@ -130,11 +124,12 @@ barplot(words.proportion[id], col=heat.colors(20),las=2)
 id2 = order(freqs, decreasing = TRUE)[1:50]
                     topWords.clus = colnames(tweet.matrix)[id2]
  D = dist(freqs[id2])
-
+##Complete Linkage 
 h.complete = hclust(D)
 h.complete <- color_branches(h.complete, k = 4)
 plot(h.complete,main = "Complete")
 
+##Single Linkage
 h.single = hclust(D, method="single")
 h.single <- color_branches(h.single, k = 4)
 plot(h.single,main = "Single")
@@ -156,13 +151,12 @@ We want to categorize (cluster) the users of the tweets about the Public Figure 
 
 1.     Compute the most appropriate number of clusters using the elbow method. Make sure an appropriate metric is used.
 ```{r}
+
 norm.tweet.matrix = diag(1/sqrt(rowSums(tweet.matrix^2))) %*% tweet.matrix
 ## then create the distance matrix
 ##Cosine distance
 D = dist(norm.tweet.matrix, method = "euclidean")^2/2
 D[is.na(D)]=0
-?cmdscale
-?dist
 ## perform MDS using 300 dimensions
 mds.tweet.matrix <- cmdscale(D, k=300)
 ##Elbow
@@ -173,10 +167,12 @@ for (i in 1:15) {
   SSW[i]=k$tot.withinss
 }
 plot(1:15,SSW,type="b")
+## After inspecting the plot we are selecting the number of clusters= 4  using the elbow method.
 
 ```
 2.    Cluster the users and visualize the clusters in two dimensional vector space.
 ```{r}
+#K means clustering using cosine distance and number of clusters obtained from the elbow method.
 K = kmeans(mds.tweet.matrix,4, nstart = 10 )
 tweet.matrix.2d = cmdscale(D,k=2)
 plot(tweet.matrix.2d, col = K$cluster)
