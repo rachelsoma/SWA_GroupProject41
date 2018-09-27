@@ -120,7 +120,20 @@ barplot(words.proportion[id], col=heat.colors(20),las=2)
 7.      Create a dendrogram of the words in your document term matrix. You do not need to visualize all words in your dendrogram, set up appropriate boundaries to improve the visualization.
 
                     i.     Try simple and complete linkage clustering.
+                    
+                    ```{r}
+                    id2 = order(freqs, decreasing = TRUE)[1:100]
+                    topWords.clus = colnames(tweet.matrix)[id2]
+
+                    D = dist(freqs[id2])
+                    h.complete = hclust(D)
+                    plot(h.complete)
+
+                    h.single = hclust(D, method="single")
+                    plot(h.single)
+                   ```
                     ii.    Which one do you think performed better?
+                    
 
 What do these words tell us about the Person? Comment on what people are saying about this person? 
 
