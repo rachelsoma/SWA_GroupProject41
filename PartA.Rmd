@@ -77,7 +77,7 @@ corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
 
 corpus = tm_map(corpus, stemDocument)
-corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl"))
+corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far"))
 
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
@@ -121,27 +121,27 @@ barplot(words.proportion[id], col=heat.colors(20),las=2)
 7.      Create a dendrogram of the words in your document term matrix. You do not need to visualize all words in your dendrogram, set up appropriate boundaries to improve the visualization.
 
                     i.     Try simple and complete linkage clustering.
-                    
-                    ```{r}
-                    id2 = order(freqs, decreasing = TRUE)[1:100]
+         
+```{r}
+id2 = order(freqs, decreasing = TRUE)[1:100]
                     topWords.clus = colnames(tweet.matrix)[id2]
-
-                    D = dist(freqs[id2])
+ D = dist(freqs[id2])
                     h.complete = hclust(D)
                     plot(h.complete)
 
                     h.single = hclust(D, method="single")
                     plot(h.single)
+
+```
+
+                   
                    ```
                     ii.    Which one do you think performed better?
                     
 
 What do these words tell us about the Person? Comment on what people are saying about this person? 
 
-```{r}
 
-
-```
 
 8.2 Clustering the Users Who Posted Tweets About the Public Figure
 We want to categorize (cluster) the users of the tweets about the Public Figure based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users, built a document term matrix by using the user descriptions of the tweets you downloaded at section 1.
