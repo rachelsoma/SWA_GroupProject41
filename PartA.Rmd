@@ -172,9 +172,7 @@ for (i in 1:15) {
   SSW[i]=k$tot.withinss
 }
 plot(1:15,SSW,type="b")
-K = kmeans(mds.tweet.matrix,4, nstart = 10 )
-tweet.matrix.2d = cmdscale(D,k=2)
-plot(tweet.matrix.2d, col = K$cluster)
+
 ```
 2.    Cluster the users and visualize the clusters in two dimensional vector space.
 ```{r}
