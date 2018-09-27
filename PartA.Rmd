@@ -95,12 +95,13 @@ wordcloud(names(freqs),freqs,scale=c(2,0.5),random.order = FALSE,use.r.layout=FA
 ## freqs=colSums(tweet.matrix)
 ## ^^ Calculated in question 3
 
-id=order(freqs,decreasing = TRUE)[1:20]
-
+freqs
 ```
 
 5.      Compute the proportion of each term in the tweets from the vector of term frequencies. Visualize the top 20 words and their proportion by using a bar plot.
 ```{r}
+id=order(freqs,decreasing = TRUE)[1:20]
+
 topWords=colnames(tweet.matrix)[id]
 
 N = length(freqs)
