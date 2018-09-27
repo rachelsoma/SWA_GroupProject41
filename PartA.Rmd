@@ -77,7 +77,7 @@ corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
 
 corpus = tm_map(corpus, stemDocument)
-corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far"))
+corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far","quot"))
 
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
@@ -123,7 +123,7 @@ barplot(words.proportion[id], col=heat.colors(20),las=2)
                     i.     Try simple and complete linkage clustering.
          
 ```{r}
-id2 = order(freqs, decreasing = TRUE)[1:100]
+id2 = order(freqs, decreasing = TRUE)[1:50]
                     topWords.clus = colnames(tweet.matrix)[id2]
  D = dist(freqs[id2])
                     h.complete = hclust(D)
