@@ -31,10 +31,10 @@ below, declare that:
 
 Name                  | Student Number  | Contribution (%)
 ----------------------|-----------------|-----------------
-Rachel Hardie         |                 |
-Dylan Wang            |                 |
-Dylan Yoo             |                 |
-Sreenath Ramachandran |                 | 
+Rachel Hardie         |  18820821       |   25%
+Dylan Wang            |  18998014       |   25%
+Dylan Yoo             |  18640377       |   25%
+Sreenath Ramachandran |  18878716       |   25%
 
 <div style="page-break-before:always;"></div>
 
