@@ -78,7 +78,6 @@ corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co"
 corpus = tm_map(corpus,removePunctuation)
 corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
-
 corpus = tm_map(corpus, stemDocument)
 corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co", "rowling", "quot", "jkrowl"))
 
@@ -92,7 +91,6 @@ tweet.matrix = as.matrix(tweet.wdtm)
 ```{r}
 freqs=colSums(tweet.matrix)
 
-
 wordcloud(names(freqs),freqs,scale=c(2,0.5),random.order = FALSE,use.r.layout=FALSE,
                   colors=brewer.pal(8, "Dark2"),min.freq = 3)
 
@@ -102,7 +100,6 @@ wordcloud2(data, size = 0.3, shape = "circle")
 
 4.      Sum the frequencies of each terms in all documents to obtain a vector of term frequencies summed over all tweets.
 ```{r}
-id=order(freqs,decreasing = TRUE)[1:20]
 ## freqs=colSums(tweet.matrix)
 ## ^^ Calculated in question 3
 
