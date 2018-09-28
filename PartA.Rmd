@@ -52,18 +52,20 @@ library("twitteR")
 library("wordcloud2")
 #install.packages("dendextend")
 library(dendextend)
+library("knitr")
 
 ##Code in line 57-63 is used to create the SWA project.csv file,
 ## which used for the work to have a consistent set of tweets for analysis.
-#key="3g0mNQkwVxe0JKiRfSyyS0rvu"
-#secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
-#access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
-#access_secret="g8iN8UChw7jAnybFKfMxPWiWiS8hZw1lVeKzmipnnu3zR"
-#app="WSU300958"
-##setup_twitter_oauth(key,secret,access_token,access_secret)
-## tweets=search_tweets(q="J.K.Rowling",n=1000,lang="en",include_rts = FALSE)
-## save_as_csv(tweets,"SWAProject.csv")
-
+key="3g0mNQkwVxe0JKiRfSyyS0rvu"
+secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
+access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
+access_secret="g8iN8UChw7jAnybFKfMxPWiWiS8hZw1lVeKzmipnnu3zR"
+app="WSU300958"
+setup_twitter_oauth(key,secret,access_token,access_secret)
+tweets=search_tweets(q="J.K.Rowling",n=1000,lang="en")
+1
+save_as_csv(tweets,"SWAProject.csv")
+?search_tweets
 tweets=read.csv("SWAProject.csv")
 ```
 
@@ -74,13 +76,13 @@ corpus=Corpus(VectorSource(tweets$text))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'ASCII', sub = ' '))
 corpus = tm_map(corpus,removeNumbers)
-
+corpus = tm_map(corpus, removeWords,c(stopwords(),"J.K. Rowling","https", "t.co"))
 corpus = tm_map(corpus,removePunctuation)
 corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
 
 corpus = tm_map(corpus, stemDocument)
-corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far","quot","look","take","make"))
+corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far","quot","look","take","make","jaqkcpmtg","ygorfremo","ask","peopl","next","twitter","peopl","new","write","charact","got","ohhgmljqrm","say","defend","respond"))
 
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
@@ -173,7 +175,7 @@ plot(1:15,SSW,type="b")
 2.    Cluster the users and visualize the clusters in two dimensional vector space.
 ```{r}
 #K means clustering using cosine distance and number of clusters obtained from the elbow method.
-K = kmeans(mds.tweet.matrix,4, nstart = 10 )
+K = kmeans(mds.tweet.matrix,5, nstart = 10 )
 tweet.matrix.2d = cmdscale(D,k=2)
 plot(tweet.matrix.2d, col = K$cluster)
 ```
