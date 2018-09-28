@@ -307,17 +307,11 @@ table(tab2)
  #conclusion
 #Ho= retweets and clusters are independent
 #Ha= retweets and clusters are not independent
-
-
 # calculate pvalue
 p.value=mean(x2dist>x2)
 p.value
 # reject null nypothesis as pvalue<alpha(0.05)
 #As the pvalue is less than the significance level we reject the null hypothesis and can conclude that the retweets and clusters are not independent.
-
- 
- 
-
 ```
 4.      Interpret your results in context.
 ```{r}
