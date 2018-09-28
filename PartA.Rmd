@@ -56,6 +56,20 @@ library("knitr")
 
 ##Code in line 57-63 is used to create the SWA project.csv file,
 ## which used for the work to have a consistent set of tweets for analysis.
+
+key="3g0mNQkwVxe0JKiRfSyyS0rvu"
+secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
+access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
+access_secret="g8iN8UChw7jAnybFKfMxPWiWiS8hZw1lVeKzmipnnu3zR"
+app="WSU300958"
+setup_twitter_oauth(key,secret,access_token,access_secret)
+tweets=search_tweets(q="J.K.Rowling",n=1000,lang="en",include_rts = TRUE)
+tweets[55,]
+
+1
+save_as_csv(tweets,"SWAProject.csv")
+?search_tweets
+
 #key="3g0mNQkwVxe0JKiRfSyyS0rvu"
 #secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
 #access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
@@ -66,6 +80,7 @@ library("knitr")
 #1
 #save_as_csv(tweets,"SWAProject.csv")
 #?search_tweets
+# ae8480816ad1a4cedc61ec8b5737efc676fc67b5
 tweets=read.csv("SWAProject.csv")
 ```
 
@@ -205,11 +220,18 @@ clusterTweetsId4 = which(K$cluster == cluster.number4)
 clusterTweets4 = tweet.matrix[clusterTweetsId4,]
 clusterTermWeight4 = colMeans(clusterTweets4)
 sort(clusterTermWeight4, decreasing = TRUE)[1:10]
+
+cluster.number5 = 5
+clusterTweetsId5 = which(K$cluster == cluster.number5)
+clusterTweets5 = tweet.matrix[clusterTweetsId5,]
+clusterTermWeight5 = colMeans(clusterTweets5)
+sort(clusterTermWeight5, decreasing = TRUE)[1:10]
 ```
 
 4.    Comment on your findings.
 
 ```{r}
+
 
 ```
 
@@ -217,13 +239,109 @@ sort(clusterTermWeight4, decreasing = TRUE)[1:10]
 We want to examine if the number of retweeted tweets is independent of which user cluster posted the tweet.
 
 1.       Find the tweets of the users at each cluster at your tweets file and examine how many of them are retweeted.
+```{r}
+
+colnames(tweets)[1:10]
+retweetsId=which(tweets[clusterTweetsId,]$is_retweet==TRUE)
+##All 90 tweets in cluster 1 are retweets.
+retweetsId2=which(tweets[clusterTweetsId2,]$is_retweet==TRUE)
+##296 out of 565 Tweets in cluster 2 are retweets.
+retweetsId3=which(tweets[clusterTweetsId3,]$is_retweet==TRUE)
+##71 out of 140 Tweets in cluster 3 are retweets.
+retweetsId4=which(tweets[clusterTweetsId4,]$is_retweet==TRUE)
+##139 out of 140 Tweets in cluster 4 are retweets.
+retweetsId5=which(tweets[clusterTweetsId5,]$is_retweet==TRUE)
+##All 65 tweets in cluster 5 are retweets.
+
+```
 
 2.      Construct a 2×M table where M is the number of user clusters you found at Section 2. Each row (2 rows in total) should represent the total number of retweeted tweets and non-retweeted tweets in each cluster.
+```{r}
+R=length(retweetsId)
+R2=length(retweetsId2)
+R3=length(retweetsId3)
+R4=length(retweetsId4)
+R5=length(retweetsId5)
+## Number of tweets which are not retweeted
+NR=length(clusterTweetsId)-R
+NR2=length(clusterTweetsId2)-R2
+NR3=length(clusterTweetsId3)-R3
+NR4=length(clusterTweetsId4)-R4
+NR5=length(clusterTweetsId5)-R5
 
+comparison.table = matrix(c(R,R2,R3,R4,R5,NR,NR2,NR3,NR4,NR5),ncol = 5,byrow = TRUE)
+colnames(comparison.table)=c("Cluster1","Cluster2","Cluster3","Cluster4","Cluster5")
+rownames(comparison.table)=c("Retweets","Not Retweets")
+comparison.table
+```
 3.      Is retweeting independent of user groups? Perform an appropriate test to answer this question.
+```{r}
 
+#Chi-sq test
+??chisq.test
+#Expected counts
+table.matrix=as.matrix(comparison.table)
+stretchTable=function(tab,variableNames){
+  tabx=rep(rownames(tab),rowSums(tab))
+  l=ncol(tab)
+  m=nrow(tab)
+  cn=colnames(tab)
+  taby=c()
+  for(a in 1:m){
+    for(b in 1:l){
+      taby=c(taby,rep(cn[b],tab[a,b]))
+    }
+  }
+  d=data.frame(x=tabx,y=taby)
+  colnames(d)=variableNames
+  return(d)
+}
+tab2= stretchTable(table.matrix,c("Tweets","Cluster"))
+table(tab2)
+ expectedIndependent = function(X) {
+    n = sum(X)
+    p = rowSums(X)/sum(X)
+   q = colSums(X)/sum(X)
+    return(p %o% q * n) # outer product creates table
+ }
+ chiSquaredStatistic = function(X, E) {
+     return(sum((X-E)^2/E))
+ }
+ 
+  ## compute the expected table
+ E = expectedIndependent(table(tab2)) # compute expected counts if independent
+ 
+ ## compute the randomisation distribution
+ x2dist = replicate(1000, { # compute 1000 randomised chi-squared statistics
+   clusterShuffle = sample(tab2$Cluster)
+  tweetShuffle = sample(tab2$Tweets)
+  Xindep = table(tweetShuffle, clusterShuffle)
+   chiSquaredStatistic(Xindep, E)
+ })
+ hist(x2dist)
+ x2 = chiSquaredStatistic(table(tab2), E)
+ print(x2)
+ pval = mean(x2dist > x2)
+ print(pval)
+ 
+ #conclusion
+#Ho= retweets and clusters are independent
+#Ha= retweets and clusters are not independent
+
+
+# calculate pvalue
+p.value=mean(bootx2>x2)
+p.value
+# reject null nypothesis as pvalue<alpha(0.05)
+
+ 
+ 
+
+```
 4.      Interpret your results in context.
+```{r}
 
+```
 By combining all your findings, what can we say about the person's image on Twitter? Draw a conclusion from your report.
 
 The person wants the above three parts of analysis to be written up in a professional report. Each part should have its own section of the report and all questions should have thoughtful answers. Include only the relevant piece of code along with its output in the body of your assignment. More detailed code should be in the Appendix part of the assignment.
