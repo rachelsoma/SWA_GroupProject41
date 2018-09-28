@@ -82,7 +82,7 @@ corpus = tm_map(corpus,stripWhitespace)
 corpus = tm_map(corpus, tolower)
 
 corpus = tm_map(corpus, stemDocument)
-corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far","quot","look","take","make","jaqkcpmtg","ygorfremo","ask","peopl","next","twitter","peopl","new","write","charact","got","ohhgmljqrm","say","defend","respond"))
+corpus = tm_map(corpus, removeWords,c(stopwords(),"jk","https", "t.co","rowl","jkrowl","will","like","just","doe","far","quot","look","take","make","jaqkcpmtg","ygorfremo","ask","peopl","next","twitter","peopl","new","write","charact","got","ohhgmljqrm","say","defend","respond", "vrmgsnrsa","bbepgeik","nkuwxgsn","novrijqr","nlrbgguhxt"))
 
 dtm = DocumentTermMatrix(corpus)
 tweet.wdtm = weightTfIdf(dtm)
