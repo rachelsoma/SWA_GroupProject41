@@ -56,16 +56,16 @@ library("knitr")
 
 ##Code in line 57-63 is used to create the SWA project.csv file,
 ## which used for the work to have a consistent set of tweets for analysis.
-key="3g0mNQkwVxe0JKiRfSyyS0rvu"
-secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
-access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
-access_secret="g8iN8UChw7jAnybFKfMxPWiWiS8hZw1lVeKzmipnnu3zR"
-app="WSU300958"
-setup_twitter_oauth(key,secret,access_token,access_secret)
-tweets=search_tweets(q="J.K.Rowling",n=1000,lang="en")
-1
-save_as_csv(tweets,"SWAProject.csv")
-?search_tweets
+#key="3g0mNQkwVxe0JKiRfSyyS0rvu"
+#secret="Wu38XdVVJFPWpqWVBQDwyl2Reqhmg8XhDWjTJl3XwOqNlwYEcx"
+#access_token="243587433-BPMCMRHSyb3pSJS3raa0w9qPCU3RAnB3aPZtjVEM"
+#access_secret="g8iN8UChw7jAnybFKfMxPWiWiS8hZw1lVeKzmipnnu3zR"
+#app="WSU300958"
+#setup_twitter_oauth(key,secret,access_token,access_secret)
+#tweets=search_tweets(q="J.K.Rowling",n=1000,lang="en")
+#1
+#save_as_csv(tweets,"SWAProject.csv")
+#?search_tweets
 tweets=read.csv("SWAProject.csv")
 ```
 
