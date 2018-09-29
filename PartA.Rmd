@@ -51,7 +51,7 @@ library("rtweet")
 library("twitteR")
 library("wordcloud2")
 #install.packages("dendextend")
-library(dendextend)
+library("dendextend")
 library("knitr")
 
 ##Code in line 60-68 was used to create the SWA project.csv file,
@@ -64,7 +64,6 @@ library("knitr")
 #app="WSU300958"
 #setup_twitter_oauth(key,secret,access_token,access_secret)
 #tweets=search_tweets(q="J.K.Rowling",n=1000,lang="en")
-#1
 #save_as_csv(tweets,"SWAProject.csv")
 tweets=read.csv("SWAProject.csv")
 ```
