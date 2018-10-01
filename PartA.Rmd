@@ -147,7 +147,7 @@ The majority of terms are related more to the creations of J.K. Rowling than abo
 
 # Clustering the Users Who Posted Tweets About the Public Figure
 
-We want to categorize (cluster) the users of the tweets about J.K. Rowling based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users we built a document term matrix by using the user descriptions of the tweets.
+We want to categorize (cluster) the users of the tweets about J.K. Rowling based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users we built a new document term matrix by using the user descriptions of the tweets.
 
 We used K-means clustering with cosine distance for better clustering. First a Distance matrix was required to find cosine distance then we performed MDS using 300 dimensions
 
@@ -185,12 +185,12 @@ for (i in 1:15) {
 }
 plot(1:15,SSW,type="b")
 ```
- After inspecting the plot we used the elbow method to selected the number of clusers to be five.
+ 
+After inspecting the plot we used the elbow method to selected the number of clusers to be five.
 
-Users were then clustered and visualised in two-dimensional vector space.
+Users were then clustered and visualised in two-dimensional vector space with K-means clustering using cosine distance and number of clusters obtained from the elbow method.
 
 ```{r}
-#K means clustering using cosine distance and number of clusters obtained from the elbow method.
 K = kmeans(mds.tweet.matrix,5, nstart = 10 )
 tweet.matrix.2d = cmdscale(D,k=2)
 plot(tweet.matrix.2d, col = K$cluster)
