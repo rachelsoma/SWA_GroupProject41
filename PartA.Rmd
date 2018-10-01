@@ -45,12 +45,15 @@ output: html_document
 
 ##Introduction
 
+
 This report examines and analyses the twitter language used by popular author J.K. Rowling and twitter users who interact with or mention her.
+
 
 ##Analysis of Twitter language about J.K. Rowling
 In this section, we want to examine the language used in tweets. The rtweet package was used to to download 1000 tweets that contain the terms 'J.K. Rowling', rowling, and jk_rowling then save them as a .csv so as to not repeatedly call the api and because of the fast changing nature of twitter the frequent terms could change significantly. The terms we are analysing were captured on 28th September 2018. 
 
 ```{r message=FALSE, warning=FALSE}
+
 library("ROAuth")
 library("tm")
 library("wordcloud")
@@ -95,7 +98,9 @@ tweet.matrix = as.matrix(tweet.wdtm)
 
 ```
 
+
 After removing non-informative words we sum the frequencies of each terms in all documents to obtain a vector of term frequencies summed over all tweets then visualised the frequency of words in a word cloud.
+
 ```{r}
 ##term frequencies are stored in the vector 'freqs'
 freqs=colSums(tweet.matrix)
@@ -140,13 +145,9 @@ After review, we concluded that Complete Linkage is the better option as the clu
 
 The majority of terms are related more to the creations of J.K. Rowling than about her personally. Actors are frequently mentioned in relation to her, most likely because she is involved with the production of major motion pictures based on her written works. There is also a significant cluster regarding the upcoming film, 'Fantastic Beasts and Where To Find Them: The Crimes of Grindelwald' and a Korean Actress.
 
-
-
 # Clustering the Users Who Posted Tweets About the Public Figure
 
 We want to categorize (cluster) the users of the tweets about J.K. Rowling based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users we built a document term matrix by using the user descriptions of the tweets.
-
-
 
 We used K-means clustering with cosine distance for better clustering. First a Distance matrix was required to find cosine distance then we performed MDS using 300 dimensions
 
@@ -188,10 +189,19 @@ clusterTweetsId = which(K$cluster == cluster.number)
 clusterTweets = tweet.matrix[clusterTweetsId,]
 clusterTermWeight = colMeans(clusterTweets)
 sort(clusterTermWeight, decreasing = TRUE)[1:10]
+
 ```
 
 Cluster 2
 ```{r echo=FALSE}
+
+
+tweets1=tweets[clusterTweetsId,]#Look manually at the user profiles to find the type of user profiles.
+```
+
+Cluster 2
+```{r echo=FALSE}
+
 
 print("Cluster 2:")
 cluster.number2 = 2
@@ -199,6 +209,9 @@ clusterTweetsId2 = which(K$cluster == cluster.number2)
 clusterTweets2 = tweet.matrix[clusterTweetsId2,]
 clusterTermWeight2 = colMeans(clusterTweets2)
 sort(clusterTermWeight2, decreasing = TRUE)[1:10]
+
+tweets2=tweets[clusterTweetsId2,]#Look manually at the user profiles to find the type of user profiles.
+
 ```
 
 Cluster 3
@@ -208,6 +221,8 @@ clusterTweetsId3 = which(K$cluster == cluster.number3)
 clusterTweets3 = tweet.matrix[clusterTweetsId3,]
 clusterTermWeight3 = colMeans(clusterTweets3)
 sort(clusterTermWeight3, decreasing = TRUE)[1:10]
+tweets3=tweets[clusterTweetsId3,]#Look manually at the user profiles to find the type of user profiles.
+
 ```
 
 Cluster 4
@@ -217,6 +232,7 @@ clusterTweetsId4 = which(K$cluster == cluster.number4)
 clusterTweets4 = tweet.matrix[clusterTweetsId4,]
 clusterTermWeight4 = colMeans(clusterTweets4)
 sort(clusterTermWeight4, decreasing = TRUE)[1:10]
+tweets4=tweets[clusterTweetsId4,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 Cluster 5
@@ -226,6 +242,7 @@ clusterTweetsId5 = which(K$cluster == cluster.number5)
 clusterTweets5 = tweet.matrix[clusterTweetsId5,]
 clusterTermWeight5 = colMeans(clusterTweets5)
 sort(clusterTermWeight5, decreasing = TRUE)[1:10]
+tweets5=tweets[clusterTweetsId5,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 4.    Comment on your findings.
