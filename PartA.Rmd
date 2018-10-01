@@ -151,7 +151,7 @@ We want to categorize (cluster) the users of the tweets about J.K. Rowling based
 
 We used K-means clustering with cosine distance for better clustering. First a Distance matrix was required to find cosine distance then we performed MDS using 300 dimensions
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 corpus1=Corpus(VectorSource(tweets$description))
 corpus1 = tm_map(corpus1, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus1 = tm_map(corpus1, function(x) iconv(x, to = 'ASCII', sub = ' '))
@@ -184,8 +184,6 @@ for (i in 1:15) {
   SSW[i]=k$tot.withinss
 }
 plot(1:15,SSW,type="b")
-## After inspecting the plot we are selecting the number of clusters= 5  using the elbow method.
-
 ```
  After inspecting the plot we used the elbow method to selected the number of clusers to be five.
 
@@ -209,6 +207,7 @@ clusterTermWeight = colMeans(clusterTweets)
 sort(clusterTermWeight, decreasing = TRUE)[1:10]
 tweets1=tweets[clusterTweetsId,]
 ```
+
 ```{r echo=FALSE}
 print("Cluster 2:")
 cluster.number2 = 2
@@ -270,7 +269,7 @@ retweetsId5=which(tweets[clusterTweetsId5,]$is_retweet==TRUE)
 ```
 
 Next, we constructed a 2xM table where M is the number of user clusters we found previously. Each row represents the total number of retweeted tweets and non-retweeted tweets in each cluster.
-```{r}
+```{r message=FALSE, warning=FALSE}
 #Number of retweeted tweets in each cluster.
 R=length(retweetsId)
 R2=length(retweetsId2)
@@ -293,7 +292,7 @@ comparison.table
 
 Finally, we tested if retweeting is independent of user groups by performing a Chi-Square test for Independence on the data seen in comparison table above
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 #Chi-sq test for Independence
 table.matrix=as.matrix(comparison.table)
 stretchTable=function(tab,variableNames){
