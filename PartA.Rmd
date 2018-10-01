@@ -262,16 +262,15 @@ We want to examine if the number of retweeted tweets is independent of which use
 1.       Find the tweets of the users at each cluster at your tweets file and examine how many of them are retweeted.
 ```{r}
 retweetsId=which(tweets[clusterTweetsId,]$is_retweet==TRUE)
-##38 out of 53 tweets in cluster 1 are retweets.
+##19 out of 26 tweets in cluster 1 are retweets.
 retweetsId2=which(tweets[clusterTweetsId2,]$is_retweet==TRUE)
-##45 out of 79 Tweets in cluster 2 are retweets.
+##471 out of 698 Tweets in cluster 2 are retweets.
 retweetsId3=which(tweets[clusterTweetsId3,]$is_retweet==TRUE)
-##18 out of 22 Tweets in cluster 3 are retweets.
+##25 out of 50 Tweets in cluster 3 are retweets.
 retweetsId4=which(tweets[clusterTweetsId4,]$is_retweet==TRUE)
-##462 out of 676 Tweets in cluster 4 are retweets.
+##34 out of 47 Tweets in cluster 4 are retweets.
 retweetsId5=which(tweets[clusterTweetsId5,]$is_retweet==TRUE)
-##18 out of 27 tweets in cluster 5 are retweets.
-
+##41 out of 61 tweets in cluster 5 are retweets.
 ```
 
 2.      Construct a 2xM table where M is the number of user clusters you found at Section 2. Each row (2 rows in total) should represent the total number of retweeted tweets and non-retweeted tweets in each cluster.
