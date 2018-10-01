@@ -45,12 +45,12 @@ output: html_document
 
 ##Introduction
 
-This report examines and analyses the twitter language used by popular author and activist, J.K. Rowling, and twitter users who interact with or mention her.
+This report examines and analyses the twitter language used by popular author J.K. Rowling and twitter users who interact with or mention her.
 
 ##Analysis of Twitter language about J.K. Rowling
 In this section, we want to examine the language used in tweets. The rtweet package was used to to download 1000 tweets that contain the terms 'J.K. Rowling', rowling, and jk_rowling then save them as a .csv so as to not repeatedly call the api and because of the fast changing nature of twitter the frequent terms could change significantly. The terms we are analysing were captured on 28th September 2018. 
 
-```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE}
 library("ROAuth")
 library("tm")
 library("wordcloud")
@@ -77,7 +77,7 @@ tweets=read.csv("SWAProject.csv")
 
 We then constructed a document-term matrix using TFIDF weighting to describe the frequency of terms in the tweets we had collected.
 
-```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+```{r results='hide', message=FALSE, warning=FALSE}
 corpus=Corpus(VectorSource(tweets$text))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'ASCII', sub = ' '))
@@ -95,26 +95,17 @@ tweet.matrix = as.matrix(tweet.wdtm)
 
 ```
 
-After removing non-informative words we visualised the frequency of words in a word cloud.
-```{r echo=FALSE}
-freqs=colSums(tweet.matrix)
-
-##wordcloud(names(freqs),freqs,scale=c(2,0.5),random.order = FALSE,use.r.layout=FALSE, colors=brewer.pal(8, "Dark2"),min.freq = 3)
-
-data = data.frame(names(freqs), freqs)
-wordcloud2(data, size = 0.3, shape = "circle")
-```
-
-4.      Sum the frequencies of each terms in all documents to obtain a vector of term frequencies summed over all tweets.
+After removing non-informative words we sum the frequencies of each terms in all documents to obtain a vector of term frequencies summed over all tweets then visualised the frequency of words in a word cloud.
 ```{r}
 ##term frequencies are stored in the vector 'freqs'
-## freqs=colSums(tweet.matrix)
-## ^^ Calculated in question 3
-head(freqs)
+freqs=colSums(tweet.matrix)
+data = data.frame(names(freqs), freqs)
+wordcloud2(data, size = 0.3, shape = "circle")
 
+head(freqs)
 ```
 
-5.      Compute the proportion of each term in the tweets from the vector of term frequencies. Visualize the top 20 words and their proportion by using a bar plot.
+Then we Compute the proportion of each term in the tweets from the vector of term frequencies and Visualize the top 20 words and their proportion by using a bar plot.
 ```{r}
 id=order(freqs,decreasing = TRUE)[1:20]
 topWords=colnames(tweet.matrix)[id]
@@ -151,11 +142,10 @@ The majority of terms are related more to the creations of J.K. Rowling than abo
 
 
 
-8.2 Clustering the Users Who Posted Tweets About the Public Figure
+# Clustering the Users Who Posted Tweets About the Public Figure
 
-We want to categorize (cluster) the users of the tweets about the Public Figure based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users, built a document term matrix by using the user descriptions of the tweets you downloaded at section 1.
+We want to categorize (cluster) the users of the tweets about J.K. Rowling based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users we built a document term matrix by using the user descriptions of the tweets.
 
-1.     Compute the most appropriate number of clusters using the elbow method. Make sure an appropriate metric is used.
 
 
 We used K-means clustering with cosine distance for better clustering. First a Distance matrix was required to find cosine distance then we performed MDS using 300 dimensions
