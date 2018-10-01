@@ -43,8 +43,7 @@ Title: "Analysis of J.K. Rowling"
 output: html_document
 ---
 
-##Introduction
-
+#Introduction
 
 This report examines and analyses the twitter language used by popular author J.K. Rowling and twitter users who interact with or mention her.
 
@@ -141,11 +140,11 @@ plot(h.single,main = "Single")
 After review, we concluded that Complete Linkage is the better option as the clusters are better defined and it does not suffer from clusters being forced together due to single elements which, specifically for these tweets, is important because some terms such as the titles of books and movies written by or based on the works of J.K. Rowling can cause there to be different clusters linked together. This is known as chaining phenomena and can cause clusters to have a large diameter, wheras complete linkage will give us clusters with a more equal diameter.
  
 
-##What do these words tell us about J.K. Rowling? Comment on what people are saying about this person? 
+####What do these words tell us about J.K. Rowling? Comment on what people are saying about this person? 
 
 The majority of terms are related more to the creations of J.K. Rowling than about her personally. Actors are frequently mentioned in relation to her, most likely because she is involved with the production of major motion pictures based on her written works. There is also a significant cluster regarding the upcoming film, 'Fantastic Beasts and Where To Find Them: The Crimes of Grindelwald' and a Korean Actress.
 
-# Clustering the Users Who Posted Tweets About the Public Figure
+## Clustering the Users Who Posted Tweets About the Public Figure
 
 We want to categorize (cluster) the users of the tweets about J.K. Rowling based on the descriptions provided in their Twitter account to figure out what kind of users are tweeting about them. Descriptions in the users' Twitter profiles give a short piece of information about the Twitter handle. To cluster users we built a new document term matrix by using the user descriptions of the tweets.
 
@@ -250,7 +249,7 @@ tweets5=tweets[clusterTweetsId5,]
 
 Clusters 1,3,4 and 5 all appear to be fan accounts, while cluster 2 seems more likely to be news and entertainment accounts based on the terms.
 
-# Retweet Analysis of the User Clusters
+## Retweet Analysis of the User Clusters
 We want to examine if the number of retweeted tweets is independent of which user cluster posted the tweet.
 
 Retweets from each cluster are identified and their IDs are stored for later use.
@@ -332,13 +331,14 @@ x2dist = replicate(1000, { # compute 1000 randomised chi-squared statistics
   Xindep = table(tweetShuffle, clusterShuffle)
    chiSquaredStatistic(Xindep, E)
  })
- hist(x2dist)
+ hist(x2dist,main = "Chi-Squared Distribution")
  x2 = chiSquaredStatistic(table(tab2), E)
  sprintf("Chi-Sq statistic is: %f",x2)
 
  
  
 ```
+
 ####Hypothesis testing the independence of retweets and clusters
 Ho: retweets and clusters are independent
 Ha: retweets and clusters are not independent
@@ -348,8 +348,8 @@ Ha: retweets and clusters are not independent
 # calculate pvalue
 p.value=mean(x2dist>x2)
 p.value
-
 ```
+
 We Do not reject null nypothesis as p-value > alpha(0.05)
 
 As the p-value is greater than the significance level do not reject the null hypothesis.
@@ -357,7 +357,7 @@ As the p-value is greater than the significance level do not reject the null hyp
 This means that we do not have enough evidence to suggest that the retweets and clusters are not independent.
 
 
-##Conclusion
+#Conclusion
 
 When we consider all of our findings together we can say that J.K Rowling is intertwined with her creations from the Harry Potter novels and the subsequent film adaptations. Many of the frequent terms are actors from the film adaptions and also the film "Fantastic Beasts and Where To Find Them: The Crimes of Grindewald" which is due to be released.
 
