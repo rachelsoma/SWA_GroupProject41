@@ -152,9 +152,25 @@ We want to categorize (cluster) the users of the tweets about J.K. Rowling based
 We used K-means clustering with cosine distance for better clustering. First a Distance matrix was required to find cosine distance then we performed MDS using 300 dimensions
 
 ```{r}
+corpus1=Corpus(VectorSource(tweets$description))
+corpus1 = tm_map(corpus1, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
+corpus1 = tm_map(corpus1, function(x) iconv(x, to = 'ASCII', sub = ' '))
+corpus1 = tm_map(corpus1,removeNumbers)
+corpus1 = tm_map(corpus1, removeWords,c(stopwords()))
+corpus1 = tm_map(corpus1,removePunctuation)
+corpus1 = tm_map(corpus1,stripWhitespace)
+corpus1 = tm_map(corpus1, tolower)
+corpus1 = tm_map(corpus1, stemDocument)
+descriptionDtm = DocumentTermMatrix(corpus1)
+tweet.wdescriptionDtm = weightTfIdf(descriptionDtm)
+tweet.descriptionmatrix = as.matrix(tweet.wdescriptionDtm)
+#removing profiles with no description.
+empties = which(rowSums(abs(tweet.descriptionmatrix)) == 0)
+tweet.descriptionmatrix = tweet.matrix[-empties, ]
+
 #We are using Kmeans clustering with cosine distance for better clustering.
 #Distance matrix is required to find cosine distance.
-norm.tweet.matrix = diag(1/sqrt(rowSums(tweet.matrix^2))) %*% tweet.matrix
+norm.tweet.matrix = diag(1/sqrt(rowSums(tweet.descriptionmatrix^2))) %*% tweet.descriptionmatrix
 D = dist(norm.tweet.matrix, method = "euclidean")^2/2
 D[is.na(D)]=0# Convert na's in the distance matrix to 0.
 ## perform MDS using 300 dimensions
@@ -189,14 +205,13 @@ clusterTweetsId = which(K$cluster == cluster.number)
 clusterTweets = tweet.matrix[clusterTweetsId,]
 clusterTermWeight = colMeans(clusterTweets)
 sort(clusterTermWeight, decreasing = TRUE)[1:10]
-
+tweets1=tweets[clusterTweetsId,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 Cluster 2
 ```{r echo=FALSE}
 
 
-tweets1=tweets[clusterTweetsId,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 Cluster 2
@@ -258,15 +273,15 @@ We want to examine if the number of retweeted tweets is independent of which use
 1.       Find the tweets of the users at each cluster at your tweets file and examine how many of them are retweeted.
 ```{r}
 retweetsId=which(tweets[clusterTweetsId,]$is_retweet==TRUE)
-##All 90 tweets in cluster 1 are retweets.
+##38 out of 53 tweets in cluster 1 are retweets.
 retweetsId2=which(tweets[clusterTweetsId2,]$is_retweet==TRUE)
-##296 out of 565 Tweets in cluster 2 are retweets.
+##45 out of 79 Tweets in cluster 2 are retweets.
 retweetsId3=which(tweets[clusterTweetsId3,]$is_retweet==TRUE)
-##71 out of 140 Tweets in cluster 3 are retweets.
+##18 out of 22 Tweets in cluster 3 are retweets.
 retweetsId4=which(tweets[clusterTweetsId4,]$is_retweet==TRUE)
-##139 out of 140 Tweets in cluster 4 are retweets.
+##462 out of 676 Tweets in cluster 4 are retweets.
 retweetsId5=which(tweets[clusterTweetsId5,]$is_retweet==TRUE)
-##All 65 tweets in cluster 5 are retweets.
+##18 out of 27 tweets in cluster 5 are retweets.
 
 ```
 
@@ -344,8 +359,9 @@ table(tab2)
 # calculate pvalue
 p.value=mean(x2dist>x2)
 p.value
-# reject null nypothesis as pvalue<alpha(0.05)
-#As the pvalue is less than the significance level we reject the null hypothesis and can conclude that the retweets and clusters are not independent.
+# Do not reject null nypothesis as pvalue>alpha(0.05)
+#As the pvalue is greater than the significance level do not reject the null hypothesis.
+#We do not have enough evidence to suggest that the retweets and clusters are not independent.
 ```
 4.      Interpret your results in context.
 ```{r}
