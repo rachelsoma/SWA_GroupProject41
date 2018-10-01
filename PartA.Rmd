@@ -166,7 +166,7 @@ tweet.wdescriptionDtm = weightTfIdf(descriptionDtm)
 tweet.descriptionmatrix = as.matrix(tweet.wdescriptionDtm)
 #removing profiles with no description.
 empties = which(rowSums(abs(tweet.descriptionmatrix)) == 0)
-tweet.descriptionmatrix = tweet.matrix[-empties, ]
+tweet.descriptionmatrix = tweet.descriptionmatrix[-empties, ]
 
 #We are using Kmeans clustering with cosine distance for better clustering.
 #Distance matrix is required to find cosine distance.
