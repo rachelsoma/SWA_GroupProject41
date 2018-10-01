@@ -198,6 +198,7 @@ clusterTweetsId = which(K$cluster == cluster.number)
 clusterTweets = tweet.matrix[clusterTweetsId,]
 clusterTermWeight = colMeans(clusterTweets)
 sort(clusterTermWeight, decreasing = TRUE)[1:10]
+tweets1=tweets[clusterTweetsId,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 Cluster 2
@@ -209,6 +210,7 @@ clusterTweetsId2 = which(K$cluster == cluster.number2)
 clusterTweets2 = tweet.matrix[clusterTweetsId2,]
 clusterTermWeight2 = colMeans(clusterTweets2)
 sort(clusterTermWeight2, decreasing = TRUE)[1:10]
+tweets2=tweets[clusterTweetsId2,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 Cluster 3
@@ -218,6 +220,7 @@ clusterTweetsId3 = which(K$cluster == cluster.number3)
 clusterTweets3 = tweet.matrix[clusterTweetsId3,]
 clusterTermWeight3 = colMeans(clusterTweets3)
 sort(clusterTermWeight3, decreasing = TRUE)[1:10]
+tweets3=tweets[clusterTweetsId3,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 Cluster 4
@@ -227,6 +230,7 @@ clusterTweetsId4 = which(K$cluster == cluster.number4)
 clusterTweets4 = tweet.matrix[clusterTweetsId4,]
 clusterTermWeight4 = colMeans(clusterTweets4)
 sort(clusterTermWeight4, decreasing = TRUE)[1:10]
+tweets4=tweets[clusterTweetsId4,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 Cluster 5
@@ -236,6 +240,7 @@ clusterTweetsId5 = which(K$cluster == cluster.number5)
 clusterTweets5 = tweet.matrix[clusterTweetsId5,]
 clusterTermWeight5 = colMeans(clusterTweets5)
 sort(clusterTermWeight5, decreasing = TRUE)[1:10]
+tweets5=tweets[clusterTweetsId5,]#Look manually at the user profiles to find the type of user profiles.
 ```
 
 4.    Comment on your findings.
