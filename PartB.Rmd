@@ -1,0 +1,68 @@
+
+Cover Sheet
+========================================================
+
+
+By including this statement, we, all the students listed in the table
+below, declare that:
+
+- We hold a copy of this assignment if the original is lost or damaged.
+
+- We hereby certify that no part of this assignment has been copied from
+  any other student's work or from any other source except where due
+  acknowledgement is made in the assignment.
+
+- No part of the assignment has been written for us by any other person
+  except where collaboration has been authorised by the unit coordinator.
+
+- We are aware that this work may be reproduced and submitted to plagiarism
+  detection software programs for the purpose of detecting possible
+  plagiarism; this software may retain a copy on its database for future
+  plagiarism checking.
+
+- We hereby certify that no part of this assignment or product has been
+  submitted by any of us in another (previous or current) assessment, except
+  where appropriately referenced, and with prior permission from the unit
+  coordinator for this unit.
+
+- We hereby certify that we have read and understand what the University
+  considers to be academic misconduct, and that we are aware of the
+  penalties that may be imposed for academic misconduct.
+
+Name                  | Student Number  | Contribution (%)
+----------------------|-----------------|-----------------
+Rachel Hardie         |  18820821       |   25%
+Dylan Wang            |  18998014       |   25%
+Dylan Yoo             |  18640377       |   25%
+Sreenath Ramachandran |  18878716       |   25%
+
+<div style="page-break-before:always;"></div>
+
+---
+Title: "Analysis of J.K. Rowling. Part B"
+output: html_document
+---
+
+```{r }
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
