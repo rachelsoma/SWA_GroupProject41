@@ -25,12 +25,46 @@ tweet.matrix = as.matrix(tweet.wdtm)
 S=tweet.matrix%*%t(tweet.matrix)
 norm.tweet.matrix = diag(1/sqrt(rowSums(tweet.matrix^2))) %*% tweet.matrix
 CS=norm.tweet.matrix%*%t(norm.tweet.matrix)
-plot(S)
-plot(CS)
-compare.matrix(S,CS,nbins=30)
+
+head(S)[1:20]
+head(CS)[1:20]
 #8.4.2
 retweetCount=tweets$retweet_count
 retweetedIds=which(tweets$retweet_count !=0)
 retweetedTweets=tweets[retweetedIds,]
 hist(retweetedTweets$retweet_count)
 hist(log(retweetedTweets$retweet_count))
+
+#8.4.3
+graph=graph.adjacency(S)
+?plot
+plot(graph,layout = layout.drl,vertex.size=log(retweetedTweets$retweet_count))
+?vertex.s
+?layout
+which(closeness(graph)==max(closeness(graph)))
+
+
+order(betweenness(graph),decreasing = TRUE)# gives the locations.
+sort(betweenness(graph),decreasing = TRUE) # gives the values
+graph[163]
+
+
+
+
+
+#old trials
+Graph=graph_from_adjacency_matrix(S,"undirected",weighted = TRUE )
+V(Graph)
+E(Graph)
+?graph_from_adjacency_matrix
+tkplot(Graph,canvas.width = 1000,canvas.height = 1000)
+plot(Graph,vertex.color = "steelblue4", edge.width = 1, 
+     vertex.label = NA, edge.color = "darkgrey", layout =layout_with_fr(Graph))
+??DiagrammeR
+DiagrammeR(Graph)
+?igraph
+
+
+
+
+
