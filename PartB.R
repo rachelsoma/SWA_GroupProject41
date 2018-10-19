@@ -28,8 +28,11 @@ CS=norm.tweet.matrix%*%t(norm.tweet.matrix)
 
 head(S)[1:20]
 head(CS)[1:20]
+
 #8.4.2
 retweetCount=tweets$retweet_count
+sort(retweetCount)
+sort(retweetedTweets$retweet_count,decreasing = TRUE)
 retweetedIds=which(tweets$retweet_count !=0)
 retweetedTweets=tweets[retweetedIds,]
 hist(retweetedTweets$retweet_count)
@@ -37,22 +40,35 @@ hist(log(retweetedTweets$retweet_count))
 
 #8.4.3
 graph=graph.adjacency(S)
-?plot
-plot(graph,layout = layout.drl,vertex.size=log(retweetedTweets$retweet_count))
-?vertex.s
-?layout
-which(closeness(graph)==max(closeness(graph)))
+plot(graph,layout = layout.drl,vertex.size=retweetCount)
+#How to remove the tweets from the graph
+#to remove self loops decide later
+#coords <- layout.auto(graph1)
+#plot(simplify(graph1), layout = coords) # remove loops and multiple edges
 
+#8.5
+which(closeness(graph)==max(closeness(graph)))
+degree(graph)
 
 order(betweenness(graph),decreasing = TRUE)# gives the locations.
 sort(betweenness(graph),decreasing = TRUE) # gives the values
-graph[163]
+
+
+#8.4.3 new dont use
+#retweetedIds1=which(tweets$retweet_count >200)
+stest=S[retweetedIds1,retweetedIds1]
+graph1=graph.adjacency(stest, mode = "undirected")
+?graph.adjacency
+plot(graph1,vertex.size=retweetCount)
+coords <- layout.auto(graph1)
+plot(simplify(graph1), layout = coords) # remove loops and multiple edges
 
 
 
 
 
-#old trials
+
+#old trials dont use
 Graph=graph_from_adjacency_matrix(S,"undirected",weighted = TRUE )
 V(Graph)
 E(Graph)
