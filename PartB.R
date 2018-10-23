@@ -41,7 +41,7 @@ hist(retweetCount)
 hist(log(retweetCount+1))
 
 #8.4.3
-graph=graph.adjacency(S)
+graph=graph.adjacency(S,weighted = TRUE)
 plot(graph,layout = layout.drl,vertex.size=log(retweetCount+1))
 #How to remove the tweets from the graph
 #to remove self loops decide later
