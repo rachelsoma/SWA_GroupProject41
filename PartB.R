@@ -23,7 +23,9 @@ tweet.wdtm = weightTfIdf(dtm)
 tweet.matrix = as.matrix(tweet.wdtm)
 #Find similarity matrix
 S=tweet.matrix%*%t(tweet.matrix)
+#to find the cosine similarity matrix we need  the normalised tweet matrix.
 norm.tweet.matrix = diag(1/sqrt(rowSums(tweet.matrix^2))) %*% tweet.matrix
+#cosine similarity
 CS=norm.tweet.matrix%*%t(norm.tweet.matrix)
 
 head(S)[1:20]
@@ -32,14 +34,11 @@ head(CS)[1:20]
 #8.4.2
 retweetCount=tweets$retweet_count
 hist(retweetCount)
+#As the histogram of retwet count is exponenetial 
+#we take logarithm of retweet counts
+#we take the log of retweet count+1 
+#so as to eliminate log 0 from the data
 hist(log(retweetCount+1))
-
-# sort(retweetCount)
-# sort(retweetedTweets$retweet_count,decreasing = TRUE)
-# retweetedIds=which(tweets$retweet_count !=0)
-# retweetedTweets=tweets[retweetedIds,]
-# hist(retweetedTweets$retweet_count)
-# hist(log(retweetedTweets$retweet_count))
 
 #8.4.3
 graph=graph.adjacency(S)
@@ -49,21 +48,22 @@ plot(graph,layout = layout.drl,vertex.size=log(retweetCount+1))
 #coords <- layout.auto(graph1)
 #plot(simplify(graph1), layout = coords) # remove loops and multiple edges
 
-#8.5
+#8.5.1
 #degree centrality
 degree(graph)
-which(degree(graph)==max(degree(graph)))
-#closeness centrality is not working.. needs to be checked
+topTweetsDegree=order(degree(graph),decreasing = TRUE)[1:10]
+tweets$text[topTweetsDegree]
+#closeness centrality 
 closeness(graph)
-which(closeness(graph)==max(closeness(graph)))
-degree(graph)
+topTweetsCloseness=order(closeness(graph),decreasing = TRUE)[1:10]
+tweets$text[topTweetsCloseness]
 
 #betweenness centrality
 betweenness(graph)
-order(betweenness(graph),decreasing = TRUE)# gives the locations.
-sort(betweenness(graph),decreasing = TRUE) # gives the values
+topTweetsBetweenness=order(betweenness(graph),decreasing = TRUE)[1:10]
+tweets$text[topTweetsBetweenness]
 
-#8.5.2
+#8.5.2 Page rank to calculate the most influential tweets
 adjacency.to.probability = function(A) {
   cols = ncol(A)
   for (a in 1:cols) {
@@ -85,6 +85,10 @@ alpha=0.8
 M = alpha * T + (1 - alpha) * J
 M = adjacency.to.probability(M)
 #Power method to find stationary distribution
+#function to calculate Euclidean distance between two vectors.
+differenceEuc=function(x,y){
+  return(sqrt(sum((x-y)^2)))
+}
 stationary.distribution = function(T) {
   # first create the initial state distribution
   n = ncol(T)
@@ -100,49 +104,31 @@ stationary.distribution = function(T) {
   }
   return(p)
 }
-#function to calculate Euclidean distance between two vectors.
-differenceEuc=function(x,y){
-  return(sqrt(sum((x-y)^2)))
-}
+
 p = stationary.distribution(M)
-influentialTweets=order(p,decreasing = TRUE)[1:10]
+influentialTweets=order(p,decreasing = TRUE)[1:11]
+#took 11 to get 10 distinct users as one user was repeat in top10.
 tweets$text[influentialTweets]
 users=tweets$screen_name[influentialTweets]
 users
-InfluenceRatio=
-  tweets$followers_count[influentialTweets]/tweets$friends_count[influentialTweets]
+
+#8.5.4 influence ratio
+InfluenceRatio= tweets$followers_count[influentialTweets]/
+                tweets$friends_count[influentialTweets]
+influence <- data.frame(users,InfluenceRatio)
+names(influence) <- c("User Names","Influence Ratio")
+influence
+#8.5.4 Activity measures
 ActivityMeasure=tweets$statuses_count[influentialTweets]
-ActivityMeasure
+activity <- data.frame(users,ActivityMeasure)
+names(influence) <- c("User Names","Activity Measure")
+activity
+#8.5.5
 plot(InfluenceRatio,ActivityMeasure,col="brown",pch=20,
-     text(InfluenceRatio,ActivityMeasure,labels = users,cex = 0.5,pos=1))
+     text(InfluenceRatio,ActivityMeasure,labels = users,cex = 0.5,pos=3))
 
 
 
-# #8.4.3 new dont use
-# #retweetedIds1=which(tweets$retweet_count >200)
-# stest=S[retweetedIds1,retweetedIds1]
-# graph1=graph.adjacency(stest, mode = "undirected")
-# ?graph.adjacency
-# plot(graph1,vertex.size=retweetCount)
-# coords <- layout.auto(graph1)
-# plot(simplify(graph1), layout = coords) # remove loops and multiple edges
-# 
-# 
-# 
-# 
-# 
-# 
-# #old trials dont use
-# Graph=graph_from_adjacency_matrix(S,"undirected",weighted = TRUE )
-# V(Graph)
-# E(Graph)
-# ?graph_from_adjacency_matrix
-# tkplot(Graph,canvas.width = 1000,canvas.height = 1000)
-# plot(Graph,vertex.color = "steelblue4", edge.width = 1, 
-#      vertex.label = NA, edge.color = "darkgrey", layout =layout_with_fr(Graph))
-# ??DiagrammeR
-# DiagrammeR(Graph)
-# ?igraph
 
 
 
