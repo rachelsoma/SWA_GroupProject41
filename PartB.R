@@ -121,7 +121,7 @@ influence
 #8.5.4 Activity measures
 ActivityMeasure=tweets$statuses_count[influentialTweets]
 activity <- data.frame(users,ActivityMeasure)
-names(influence) <- c("User Names","Activity Measure")
+names(activity) <- c("User Names","Activity Measure")
 activity
 #8.5.5
 plot(InfluenceRatio,ActivityMeasure,col="brown",pch=20,
