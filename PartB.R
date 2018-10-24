@@ -42,11 +42,19 @@ hist(log(retweetCount+1))
 
 #8.4.3
 graph=graph.adjacency(S,weighted = TRUE)
-plot(graph,layout = layout.drl,vertex.size=log(retweetCount+1))
-#How to remove the tweets from the graph
-#to remove self loops decide later
-#coords <- layout.auto(graph1)
-#plot(simplify(graph1), layout = coords) # remove loops and multiple edges
+plot(simplify(graph),layout = layout.drl,vertex.size=log(retweetCount+1))
+# to make the graph simpler we are taking the top 20 retweeted tweets.
+id=order(log(retweetCount+1),decreasing = TRUE)[1:20]
+tweets.imp=tweets[id,]
+retweetCount.imp=tweets.imp$retweet_count
+retweetCount.imp
+tweet.imp=tweet.matrix[id,]
+s.imp=tweet.imp%*%t(tweet.imp)
+set.seed(1500)
+graph1=graph.adjacency(s.imp,weighted = TRUE)
+plot(simplify(graph1),layout=layout.auto,
+     vertex.size=log(retweetCount.imp+1),
+     edge.arrow.size=0.1,vertex.label.size=1,vertex.label.color="black")
 
 #8.5.1
 #degree centrality
