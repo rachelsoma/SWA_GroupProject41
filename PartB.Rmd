@@ -49,11 +49,9 @@ library("rtweet")
 library("twitteR")
 library("igraph")
 tweets=read.csv("SWAProject.csv")
-```
 
-We then constructed a document-term matrix using TFIDF weighting to describe the frequency of terms in the tweets we had collected.
+#We then constructed a document-term matrix using TFIDF weighting to describe the frequency of terms in the tweets we had collected.
 
-```{r results='hide', message=FALSE, warning=FALSE}
 corpus=Corpus(VectorSource(tweets$text))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'ASCII', sub = ' '))
@@ -78,7 +76,7 @@ tweet.matrix = as.matrix(tweet.wdtm)
 
 To find the cosine similarity matrix we first find the normalised tweet matrix.
 
-```{r echo=false}
+```{r warning=FALSE}
 #Find similarity matrix
 S=tweet.matrix%*%t(tweet.matrix)
 #to find the cosine similarity matrix we need  the normalised tweet matrix.
@@ -94,7 +92,7 @@ head(CS)[1:20]
 As the histogram of retweet count is exponenetial we take logarithm of retweet counts we take the log of retweet count+1 so as to eliminate log 0 from the data
 
 
-```{r echo=false}
+```{r warning=FALSE}
 #8.4.2
 retweetCount=tweets$retweet_count
 
@@ -104,9 +102,10 @@ hist(log(retweetCount+1))
 ```
 ##8.4.3
 To make the graph simpler we are taking the top 20 retweeted tweets.
-```{r}
+```{r warning=FALSE}
 graph=graph.adjacency(S,weighted = TRUE)
-plot(simplify(graph),layout = layout.drl,vertex.size=log(retweetCount+1))
+plot(simplify(graph),layout = layout.drl,vertex.size=log(retweetCount+1),
+     edge.arrow.size=0.1,vertex.label.size=.5,vertex.label.color="black")
 # to make the graph simpler we are taking the top 20 retweeted tweets.
 id=order(log(retweetCount+1),decreasing = TRUE)[1:20]
 tweets.imp=tweets[id,]
@@ -122,22 +121,21 @@ plot(simplify(graph1),layout=layout.auto,
 ```
 ##8.5.1
 Degree centrality
-```{r}
-
-degree(graph)
+```{r warning=FALSE}
+#degree(graph)
 topTweetsDegree=order(degree(graph),decreasing = TRUE)[1:10]
 tweets$text[topTweetsDegree]
 
 ```
 Closeness centrality 
 
-```{r}
-closeness(graph)
+```{r warning=FALSE}
+#closeness(graph)
 topTweetsCloseness=order(closeness(graph),decreasing = TRUE)[1:10]
 tweets$text[topTweetsCloseness]
 ```
 #8.5.2 Page rank to calculate the most influential tweets
-```{r}
+```{r warning=FALSE}
 adjacency.to.probability = function(A) {
   cols = ncol(A)
   for (a in 1:cols) {
@@ -187,7 +185,7 @@ users=tweets$screen_name[influentialTweets]
 users
 ```
 #8.5.4 influence ratio
-```{r}
+```{r warning=FALSE}
 InfluenceRatio= tweets$followers_count[influentialTweets]/
                 tweets$friends_count[influentialTweets]
 influence <- data.frame(users,InfluenceRatio)
@@ -196,7 +194,7 @@ influence
 ```
 
 #8.5.4 Activity measures
-```{r}
+```{r warning=FALSE}
 ActivityMeasure=tweets$statuses_count[influentialTweets]
 activity <- data.frame(users,ActivityMeasure)
 names(activity) <- c("User Names","Activity Measure")
@@ -205,7 +203,7 @@ activity
 
 #8.5.5
 
-```{r}
+```{r warning=FALSE}
 plot(InfluenceRatio,ActivityMeasure,col="brown",pch=20,
      text(InfluenceRatio,ActivityMeasure,labels = users,cex = 0.5,pos=3))
 ```
