@@ -1,3 +1,9 @@
+---
+Title: "Analysis of J.K. Rowling. Part B"
+output:
+  html_document: default
+  pdf_document: default
+---
 
 Cover Sheet
 ========================================================
@@ -26,7 +32,7 @@ below, declare that:
   coordinator for this unit.
 
 - We hereby certify that we have read and understand what the University
-  considers to be academic misconduct, and that we are aware of the
+  considers to be academic misconduct, and that we are aware of thes
   penalties that may be imposed for academic misconduct.
 
 Name                  | Student Number  | Contribution (%)
@@ -38,20 +44,18 @@ Sreenath Ramachandran |  18878716       |   25%
 
 <div style="page-break-before:always;"></div>
 
----
-Title: "Analysis of J.K. Rowling. Part B"
-output: html_document
----
-
-```{r message=FALSE, warning=FALSE}
+```{r setup, message=FALSE, warning=FALSE}
 library("tm")
 library("rtweet")
 library("twitteR")
 library("igraph")
+library("knitr")
 tweets=read.csv("SWAProject.csv")
+```
 
-#We then constructed a document-term matrix using TFIDF weighting to describe the frequency of terms in the tweets we had collected.
+We then constructed a document-term matrix using TFIDF weighting to describe the frequency of terms in the tweets we had collected.
 
+```{r DTM, results='hide', message=FALSE, warning=FALSE}
 corpus=Corpus(VectorSource(tweets$text))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'UTF8', sub = 'byte'))
 corpus = tm_map(corpus, function(x) iconv(x, to = 'ASCII', sub = ' '))
@@ -76,7 +80,7 @@ tweet.matrix = as.matrix(tweet.wdtm)
 
 To find the cosine similarity matrix we first find the normalised tweet matrix.
 
-```{r warning=FALSE}
+```{r cosine}
 #Find similarity matrix
 S=tweet.matrix%*%t(tweet.matrix)
 #to find the cosine similarity matrix we need  the normalised tweet matrix.
@@ -87,27 +91,35 @@ CS=norm.tweet.matrix%*%t(norm.tweet.matrix)
 head(S)[1:20]
 head(CS)[1:20]
 ```
-
+##Difference between Cosine similarity and S
+Cosine similarity gives the angle between the documents. The similarity matrix is more like the magnitude of the difference between the documents whereas the cosine similarity matrix gives the direction.Cosine similarity of the documents will be between 0 and 1. 
 ##8.4.2
 As the histogram of retweet count is exponenetial we take logarithm of retweet counts we take the log of retweet count+1 so as to eliminate log 0 from the data
 
 
-```{r warning=FALSE}
+```{r retweet_log}
 #8.4.2
 retweetCount=tweets$retweet_count
 
-hist(retweetCount)
+hist(retweetCount,col=heat.colors(5))
+retweet.log=log(retweetCount+1)
 
-hist(log(retweetCount+1))
+hist(retweet.log,col=heat.colors(5))
 ```
+
+
+
 ##8.4.3
+
 To make the graph simpler we are taking the top 20 retweeted tweets.
-```{r warning=FALSE}
+
+
+```{r network_graphs}
 graph=graph.adjacency(S,weighted = TRUE)
-plot(simplify(graph),layout = layout.drl,vertex.size=log(retweetCount+1),
-     edge.arrow.size=0.1,vertex.label.size=.5,vertex.label.color="black")
-# to make the graph simpler we are taking the top 20 retweeted tweets.
-id=order(log(retweetCount+1),decreasing = TRUE)[1:20]
+
+plot(simplify(graph),layout = layout.drl, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(5),edge.width=0.5, edge.arrow.size=0)
+
+id=order(retweet.log,decreasing = TRUE)[1:20]
 tweets.imp=tweets[id,]
 retweetCount.imp=tweets.imp$retweet_count
 #retweetCount.imp
@@ -116,26 +128,44 @@ s.imp=tweet.imp%*%t(tweet.imp)
 set.seed(1500)
 graph1=graph.adjacency(s.imp,weighted = TRUE)
 plot(simplify(graph1),layout=layout.auto,
-     vertex.size=log(retweetCount.imp+1),
-     edge.arrow.size=0.1,vertex.label.size=.5,vertex.label.color="black")
+     vertex.size=retweet.log*.9, edge.width=0.5,
+     edge.arrow.size=0,vertex.label="",vertex.color=heat.colors(5))
 ```
+
+
+###Results
+
+Connected tweets mostly are the same tweets retweeted by different users.
+
+
 ##8.5.1
-Degree centrality
-```{r warning=FALSE}
-#degree(graph)
-topTweetsDegree=order(degree(graph),decreasing = TRUE)[1:10]
+###Degree centrality
+```{r degree_centrality, warning=FALSE}
+
+degCentrality=degree(graph)
+topTweetsDegree=order(degCentrality,decreasing = TRUE)[1:10]
 tweets$text[topTweetsDegree]
 
 ```
-Closeness centrality 
 
-```{r warning=FALSE}
-#closeness(graph)
+###Closeness centrality 
+
+```{r closeness_centrality, warning=FALSE}
+closenessCentrality=closeness(graph)
 topTweetsCloseness=order(closeness(graph),decreasing = TRUE)[1:10]
 tweets$text[topTweetsCloseness]
 ```
+
+###Betweenness centrality 
+
+```{r betweenness, warning=FALSE}
+betweennessCentrality=betweenness(graph)
+topTweetsBetweenness=order(betweenness(graph),decreasing = TRUE)[1:10]
+tweets$text[topTweetsBetweenness]
+```
+
 #8.5.2 Page rank to calculate the most influential tweets
-```{r warning=FALSE}
+```{r page_rank, warning=FALSE}
 adjacency.to.probability = function(A) {
   cols = ncol(A)
   for (a in 1:cols) {
@@ -181,30 +211,50 @@ p = stationary.distribution(M)
 influentialTweets=order(p,decreasing = TRUE)[1:11]
 #took 11 to get 10 distinct users as one user was repeat in top10.
 tweets$text[influentialTweets]
+
+```
+###8.5.3 Influential Users
+```{r influencers, warning=FALSE}
 users=tweets$screen_name[influentialTweets]
 users
+
 ```
+
+
 #8.5.4 influence ratio
-```{r warning=FALSE}
+```{r influence_ratio, warning=FALSE}
 InfluenceRatio= tweets$followers_count[influentialTweets]/
                 tweets$friends_count[influentialTweets]
-influence <- data.frame(users,InfluenceRatio)
+
+influence <- unique(data.frame(users,InfluenceRatio))
 names(influence) <- c("User Names","Influence Ratio")
 influence
+
+#median followers in sample
+followers.median=median(tweets$followers_count)
+influenceRatio.median=median(InfluenceRatio)
 ```
 
 #8.5.4 Activity measures
-```{r warning=FALSE}
+```{r activities, warning=FALSE}
 ActivityMeasure=tweets$statuses_count[influentialTweets]
 activity <- data.frame(users,ActivityMeasure)
 names(activity) <- c("User Names","Activity Measure")
-activity
+plot(activity,pch = 19)
 ```
 
 #8.5.5
 
-```{r warning=FALSE}
-plot(InfluenceRatio,ActivityMeasure,col="brown",pch=20,
-     text(InfluenceRatio,ActivityMeasure,labels = users,cex = 0.5,pos=3))
+```{r echo=FALSE}
+plot(InfluenceRatio,ActivityMeasure,col=heat.colors(20),pch=20, text(InfluenceRatio,ActivityMeasure,labels = users,cex = .7,pos=3 ))+
+abline(v=influenceRatio.median,col="blue")+title(main="Activity Measure and Influence Ratio of influential Tweet authors")
+
 ```
 
+
+
+##Findings
+The most influential user 'culturalkumite' is a bot. The high influential ratio is as it has 61 followers and it follows only 1 user.This may be due due to the fact that it tweets "versus" questions about authors, film, culture and trending topics. Other users of influential tweets do not have a very high influence ratio and are most likely fans of  J.K.Rowling's work.
+
+###Conclusion
+J.K Rowling is a very popular author. Tweets about her often changes. Of the tweets we have downloaded most of them were about her creations. Most of the influential tweets were about the movie Fantastic beasts. There were some users who were accusing Rowling of Racism in the charecters she created, particularly for the 'nagini' role in the film Fantastic Beasts. 
