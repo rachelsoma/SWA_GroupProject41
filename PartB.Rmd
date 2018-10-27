@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 
 Cover Sheet
 ========================================================
@@ -48,6 +53,7 @@ library("tm")
 library("rtweet")
 library("twitteR")
 library("igraph")
+library("knitr")
 tweets=read.csv("SWAProject.csv")
 
 #We then constructed a document-term matrix using TFIDF weighting to describe the frequency of terms in the tweets we had collected.
@@ -76,7 +82,11 @@ tweet.matrix = as.matrix(tweet.wdtm)
 
 To find the cosine similarity matrix we first find the normalised tweet matrix.
 
+<<<<<<< HEAD
 ```{r warning=FALSE}
+=======
+```{r}
+>>>>>>> 597a499bf72e2c76e41dcb06b913f601d1b29034
 #Find similarity matrix
 S=tweet.matrix%*%t(tweet.matrix)
 #to find the cosine similarity matrix we need  the normalised tweet matrix.
@@ -88,11 +98,17 @@ head(S)[1:20]
 head(CS)[1:20]
 ```
 
+##Difference between Cosine similarity and S
+Cosine similarity gives the angle between the documents. The similarity matrix is more like the magnitude of the difference between the documents whereas the cosine similarity matrix gives the direction.Cosine similarity of the documents will be between 0 and 1. 
 ##8.4.2
 As the histogram of retweet count is exponenetial we take logarithm of retweet counts we take the log of retweet count+1 so as to eliminate log 0 from the data
 
 
+<<<<<<< HEAD
 ```{r warning=FALSE}
+=======
+```{r}
+>>>>>>> 597a499bf72e2c76e41dcb06b913f601d1b29034
 #8.4.2
 retweetCount=tweets$retweet_count
 
@@ -100,9 +116,18 @@ hist(retweetCount)
 
 hist(log(retweetCount+1))
 ```
+
+
+
 ##8.4.3
 To make the graph simpler we are taking the top 20 retweeted tweets.
+<<<<<<< HEAD
 ```{r warning=FALSE}
+=======
+
+
+```{r}
+>>>>>>> 597a499bf72e2c76e41dcb06b913f601d1b29034
 graph=graph.adjacency(S,weighted = TRUE)
 plot(simplify(graph),layout = layout.drl,vertex.size=log(retweetCount+1),
      edge.arrow.size=0.1,vertex.label.size=.5,vertex.label.color="black")
@@ -119,21 +144,50 @@ plot(simplify(graph1),layout=layout.auto,
      vertex.size=log(retweetCount.imp+1),
      edge.arrow.size=0.1,vertex.label.size=.5,vertex.label.color="black")
 ```
+
+
+###Results
+
+Connected tweets mostly are the same tweets retweeted by different users.
+
+
 ##8.5.1
+<<<<<<< HEAD
 Degree centrality
 ```{r warning=FALSE}
 #degree(graph)
+=======
+###Degree centrality
+```{r}
+
+degCentrality=degree(graph)
+>>>>>>> 597a499bf72e2c76e41dcb06b913f601d1b29034
 topTweetsDegree=order(degree(graph),decreasing = TRUE)[1:10]
 tweets$text[topTweetsDegree]
 
 ```
-Closeness centrality 
 
+###Closeness centrality 
+
+<<<<<<< HEAD
 ```{r warning=FALSE}
 #closeness(graph)
+=======
+```{r}
+closenessCentrality=closeness(graph)
+>>>>>>> 597a499bf72e2c76e41dcb06b913f601d1b29034
 topTweetsCloseness=order(closeness(graph),decreasing = TRUE)[1:10]
 tweets$text[topTweetsCloseness]
 ```
+
+###Betweenness centrality 
+
+```{r}
+betweennessCentrality=betweenness(graph)
+topTweetsBetweenness=order(betweenness(graph),decreasing = TRUE)[1:10]
+tweets$text[topTweetsBetweenness]
+```
+
 #8.5.2 Page rank to calculate the most influential tweets
 ```{r warning=FALSE}
 adjacency.to.probability = function(A) {
@@ -181,9 +235,15 @@ p = stationary.distribution(M)
 influentialTweets=order(p,decreasing = TRUE)[1:11]
 #took 11 to get 10 distinct users as one user was repeat in top10.
 tweets$text[influentialTweets]
+
+```
+###8.5.3 Influential Users
+```{r}
 users=tweets$screen_name[influentialTweets]
 users
 ```
+
+
 #8.5.4 influence ratio
 ```{r warning=FALSE}
 InfluenceRatio= tweets$followers_count[influentialTweets]/
@@ -208,3 +268,11 @@ plot(InfluenceRatio,ActivityMeasure,col="brown",pch=20,
      text(InfluenceRatio,ActivityMeasure,labels = users,cex = 0.5,pos=3))
 ```
 
+
+
+##Findings
+The most influential user 'culturalkumite' is a bot. The high influential ratio is as it has 61 followers and it follows only 1 user.This may be due due to the fact that it tweets about authors, film and art in general.People might be following the bot to get latest news in those fields. Other users of influential tweets do not have a very high influence ratio and are most likely fans of  J.K.Rowling's work.
+
+
+###Conclusion
+J.K Rowling is a very popular author. Tweets about her often changes. Of the tweets we have downloaded most of them were about her creations. Most of the influential tweets were about the movie Fantastic beasts. There were some users who were accusing Rowling of Racism in the charecters she created, particularly for the 'nagini' role in the film Fantastic Beasts. 
