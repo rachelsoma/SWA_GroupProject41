@@ -232,6 +232,7 @@ influence
 
 #median followers in sample
 followers.median=median(tweets$followers_count)
+#median influence ratio in sample
 influenceRatio.median=median(InfluenceRatio)
 ```
 
@@ -254,7 +255,7 @@ abline(v=influenceRatio.median,col="blue")+title(main="Activity Measure and Infl
 
 
 ##Findings
-The most influential user 'culturalkumite' is a bot. The high influential ratio is as it has 61 followers and it follows only 1 user.This may be due due to the fact that it tweets "versus" questions about authors, film, culture and trending topics. Other users of influential tweets do not have a very high influence ratio and are most likely fans of  J.K.Rowling's work.
+The most influential user 'culturalkumite' is a bot. The high influential ratio is due to it having 61 followers and following only 1 user while the median number of follows in the collected data is 461. Other users of influential tweets do not have a very high influence ratio and are most likely fans of  J.K.Rowling's work who follow more users rather than broadcasting without following, as appears the case with 'culturalkumite'.
 
 ###Conclusion
 J.K Rowling is a very popular author. Tweets about her often changes. Of the tweets we have downloaded most of them were about her creations. Most of the influential tweets were about the movie Fantastic beasts. There were some users who were accusing Rowling of Racism in the charecters she created, particularly for the 'nagini' role in the film Fantastic Beasts. 
