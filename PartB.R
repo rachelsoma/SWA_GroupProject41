@@ -50,7 +50,7 @@ retweetCount.imp=tweets.imp$retweet_count
 retweetCount.imp
 tweet.imp=tweet.matrix[id,]
 s.imp=tweet.imp%*%t(tweet.imp)
-
+set.seed(1500)
 graph1=graph.adjacency(s.imp,weighted = TRUE)
 plot(simplify(graph1),layout=layout.auto,
      vertex.size=log(retweetCount.imp+1),
