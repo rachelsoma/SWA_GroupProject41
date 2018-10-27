@@ -97,7 +97,6 @@ CS=norm.tweet.matrix%*%t(norm.tweet.matrix)
 head(S)[1:20]
 head(CS)[1:20]
 ```
-
 ##Difference between Cosine similarity and S
 Cosine similarity gives the angle between the documents. The similarity matrix is more like the magnitude of the difference between the documents whereas the cosine similarity matrix gives the direction.Cosine similarity of the documents will be between 0 and 1. 
 ##8.4.2
