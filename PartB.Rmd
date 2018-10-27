@@ -117,7 +117,7 @@ To make the graph simpler we are taking the top 20 retweeted tweets.
 ```{r network_graphs}
 graph=graph.adjacency(S,weighted = TRUE)
 
-plot(simplify(graph),layout = layout.drl, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(5),edge.width=0.5, edge.arrow.size=0)
+plot(simplify(graph),layout = layout.drl, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(10),edge.width=0.5, edge.arrow.size=0)
 
 id=order(retweet.log,decreasing = TRUE)[1:20]
 tweets.imp=tweets[id,]
@@ -240,14 +240,15 @@ influenceRatio.median=median(InfluenceRatio)
 ActivityMeasure=tweets$statuses_count[influentialTweets]
 activity <- data.frame(users,ActivityMeasure)
 names(activity) <- c("User Names","Activity Measure")
-plot(activity,pch = 19)
+plot(activity,pch = 20,lwd=5)
+text(users, ActivityMeasure, labels=users, cex= 0.7, pos=4)
 ```
 
 #8.5.5
 
 ```{r echo=FALSE}
 plot(InfluenceRatio,ActivityMeasure,col=heat.colors(20),pch=20, text(InfluenceRatio,ActivityMeasure,labels = users,cex = .7,pos=3 ))+
-abline(v=influenceRatio.median,col="blue")+title(main="Activity Measure and Influence Ratio of influential Tweet authors")
+abline(v=influenceRatio.median,col="blue")+title(main="Activity Measure and Influence Ratio of influential Tweet authors",sub="Median for all samples shown with blue line",cex.sub = 0.75,col.sub="blue")
 
 ```
 
