@@ -124,8 +124,13 @@ To make the graph simpler we are taking the top 20 retweeted tweets.
 
 ```{r network_graphs}
 graph=graph.adjacency(S,weighted = TRUE)
+<<<<<<< HEAD
 par(mai=c(0,0,0,0))
 plot(simplify(graph),layout =layout.fruchterman.reingold, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(20),edge.width=0.5, edge.arrow.size=0)
+=======
+
+plot(simplify(graph),layout = layout.drl, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(10),edge.width=0.5, edge.arrow.size=0)
+>>>>>>> 938a0f4abcab812dec33c38d14c105d866665c3c
 
 id=order(retweet.log,decreasing = TRUE)[1:20]
 tweets.imp=tweets[id,]
