@@ -1,8 +1,9 @@
 ---
-Title: "Analysis of J.K. Rowling. Part B"
+Title: Analysis of J.K. Rowling. Part B
 output:
   html_document: default
   pdf_document: default
+  word_document: default
 ---
 
 Cover Sheet
@@ -115,6 +116,7 @@ retweet.log=log(retweetCount+1)
 
 hist(retweet.log,col="blue",breaks = 50)
 ```
+
 ##8.4.4
 
 To make the graph simpler we are taking the top 20 retweeted tweets.
@@ -122,8 +124,8 @@ To make the graph simpler we are taking the top 20 retweeted tweets.
 
 ```{r network_graphs}
 graph=graph.adjacency(S,weighted = TRUE)
-
-plot(simplify(graph),layout = layout.drl, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(0),edge.width=0.5, edge.arrow.size=0)
+par(mai=c(0,0,0,0))
+plot(simplify(graph),layout =layout.fruchterman.reingold, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(20),edge.width=0.5, edge.arrow.size=0)
 
 id=order(retweet.log,decreasing = TRUE)[1:20]
 tweets.imp=tweets[id,]
@@ -132,10 +134,12 @@ retweetCount.imp=tweets.imp$retweet_count
 tweet.imp=tweet.matrix[id,]
 s.imp=tweet.imp%*%t(tweet.imp)
 set.seed(1500)
+par(mai=c(0,0,0,0))
 graph1=graph.adjacency(s.imp,weighted = TRUE)
-plot(simplify(graph1),layout=layout.auto,
+plot(simplify(graph1),layout=layout.fruchterman.reingold,
      vertex.size=retweet.log*.9, edge.width=0.5,
      edge.arrow.size=0,vertex.label="",vertex.color=heat.colors(20))
+
 ```
 
 
@@ -271,4 +275,4 @@ We also note that because J.K. Rowling is a very well known author and has a ver
 
 Shared news articles and tweets about J.K. Rowling are likely to be retweeted heavily among clusters of users, particularly if a subset of twitter users consider a subject related to her find a particular announcement to be very good or very bad.
 
-There were some users who were accusing Rowling of Racism in the charecters she created, particularly for the 'nagini' role in the film Fantastic Beasts and other who think that Johnny Depp should not have been cast in Fantastic Beasts after being accused of assault by a former partner. On the other side of this is general excitement at the idea of actor Macauley Culkin being cast in the series.
+There were some users who were accusing Rowling of racism in the charecters she created, particularly for the 'Nagini' role in the film Fantastic Beasts. On the other side of this is general excitement at the idea of actor Macauley Culkin expressing a desire to be cast in the series.
