@@ -53,7 +53,8 @@ library("knitr")
 tweets=read.csv("SWAProject.csv")
 ```
 
-We then constructed a document-term matrix using TFIDF weighting to describe the frequency of terms in the tweets we had collected.
+# 8.4 Examining the network of the tweets about J.K. Rowling
+
 
 ```{r DTM, results='hide', message=FALSE, warning=FALSE}
 corpus=Corpus(VectorSource(tweets$text))
@@ -76,9 +77,9 @@ tweet.wdtm = weightTfIdf(dtm)
 tweet.matrix = as.matrix(tweet.wdtm)
 ```
 
-## Finding the similarity index
+### 8.4.1 Finding the similarity index
 
-To find the cosine similarity matrix we first find the normalised tweet matrix.
+To find the cosine similarity matrix we first find the normalised tweet matrix then use the TFIDF weighting obtained from frequencies in our document term matrix. 
 
 ```{r cosine}
 #Find similarity matrix
@@ -91,25 +92,30 @@ CS=norm.tweet.matrix%*%t(norm.tweet.matrix)
 head(S)[1:20]
 head(CS)[1:20]
 ```
-##Difference between Cosine similarity and S
+####Difference between Cosine similarity and S
 Cosine similarity gives the angle between the documents. The similarity matrix is more like the magnitude of the difference between the documents whereas the cosine similarity matrix gives the direction.Cosine similarity of the documents will be between 0 and 1. 
-##8.4.2
-As the histogram of retweet count is exponenetial we take logarithm of retweet counts we take the log of retweet count+1 so as to eliminate log 0 from the data
+
+##8.4.2 histogram of retweet counts
 
 
-```{r retweet_log}
-#8.4.2
+
+```{r retweets}
+
 retweetCount=tweets$retweet_count
 
-hist(retweetCount,col=heat.colors(5))
-retweet.log=log(retweetCount+1)
+hist(retweetCount,col="red",breaks = 50)
 
-hist(retweet.log,col=heat.colors(5))
 ```
 
-
+As the histogram of retweet count is exponenetial and skewed we take logarithm of retweet counts +1 so as to eliminate log 0 from the data
 
 ##8.4.3
+```{r retweet_log}
+retweet.log=log(retweetCount+1)
+
+hist(retweet.log,col="blue",breaks = 50)
+```
+##8.4.4
 
 To make the graph simpler we are taking the top 20 retweeted tweets.
 
@@ -117,7 +123,7 @@ To make the graph simpler we are taking the top 20 retweeted tweets.
 ```{r network_graphs}
 graph=graph.adjacency(S,weighted = TRUE)
 
-plot(simplify(graph),layout = layout.drl, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(10),edge.width=0.5, edge.arrow.size=0)
+plot(simplify(graph),layout = layout.drl, vertex.size=retweet.log*.9, vertex.label="",vertex.color=heat.colors(0),edge.width=0.5, edge.arrow.size=0)
 
 id=order(retweet.log,decreasing = TRUE)[1:20]
 tweets.imp=tweets[id,]
@@ -129,7 +135,7 @@ set.seed(1500)
 graph1=graph.adjacency(s.imp,weighted = TRUE)
 plot(simplify(graph1),layout=layout.auto,
      vertex.size=retweet.log*.9, edge.width=0.5,
-     edge.arrow.size=0,vertex.label="",vertex.color=heat.colors(5))
+     edge.arrow.size=0,vertex.label="",vertex.color=heat.colors(20))
 ```
 
 
@@ -138,7 +144,7 @@ plot(simplify(graph1),layout=layout.auto,
 Connected tweets mostly are the same tweets retweeted by different users.
 
 
-##8.5.1
+##8.5.1 centrality measures 
 ###Degree centrality
 ```{r degree_centrality, warning=FALSE}
 
@@ -164,7 +170,7 @@ topTweetsBetweenness=order(betweenness(graph),decreasing = TRUE)[1:10]
 tweets$text[topTweetsBetweenness]
 ```
 
-#8.5.2 Page rank to calculate the most influential tweets
+##8.5.2 Page rank to calculate the most influential tweets
 ```{r page_rank, warning=FALSE}
 adjacency.to.probability = function(A) {
   cols = ncol(A)
@@ -210,23 +216,24 @@ stationary.distribution = function(T) {
 p = stationary.distribution(M)
 influentialTweets=order(p,decreasing = TRUE)[1:11]
 #took 11 to get 10 distinct users as one user was repeat in top10.
+
 tweets$text[influentialTweets]
 
 ```
-###8.5.3 Influential Users
+##8.5.3 Influential Users
 ```{r influencers, warning=FALSE}
 users=tweets$screen_name[influentialTweets]
-users
+unique(users)
 
 ```
 
 
-#8.5.4 influence ratio
+##8.5.4 influence ratio
 ```{r influence_ratio, warning=FALSE}
 InfluenceRatio= tweets$followers_count[influentialTweets]/
                 tweets$friends_count[influentialTweets]
 
-influence <- unique(data.frame(users,InfluenceRatio))
+influence <- unique(data.frame(users,InfluenceRatio),descending=TRUE)
 names(influence) <- c("User Names","Influence Ratio")
 influence
 
@@ -236,18 +243,18 @@ followers.median=median(tweets$followers_count)
 influenceRatio.median=median(InfluenceRatio)
 ```
 
-#8.5.4 Activity measures
+##8.5.5 Activity measures
 ```{r activities, warning=FALSE}
 ActivityMeasure=tweets$statuses_count[influentialTweets]
-activity <- data.frame(users,ActivityMeasure)
+activity <- unique(data.frame(users,ActivityMeasure))
 names(activity) <- c("User Names","Activity Measure")
 activity
 ```
 
-#8.5.5
+##8.5.6 Scatter plot of users
 
 ```{r echo=FALSE}
-plot(InfluenceRatio,ActivityMeasure,col=heat.colors(20),pch=20, text(InfluenceRatio,ActivityMeasure,labels = users,cex = .7,pos=3 ))+
+plot(unique(InfluenceRatio),unique(ActivityMeasure),col=heat.colors(20),pch=20, text(InfluenceRatio,ActivityMeasure,labels = users,cex = .7,pos=3 ))+
 abline(v=influenceRatio.median,col="blue")+title(main="Activity Measure and Influence Ratio of influential Tweet authors",sub="Median for all samples shown with blue line",cex.sub = 0.75,col.sub="blue")
 
 ```
@@ -258,4 +265,10 @@ abline(v=influenceRatio.median,col="blue")+title(main="Activity Measure and Infl
 The most influential user 'culturalkumite' is a bot. The high influential ratio is due to it having 61 followers and following only 1 user while the median number of follows in the collected data is 461. Other users of influential tweets do not have a very high influence ratio and are most likely fans of  J.K.Rowling's work who follow more users rather than broadcasting without following, as appears the case with 'culturalkumite'.
 
 ###Conclusion
-J.K Rowling is a very popular author. Tweets about her often changes. Of the tweets we have downloaded most of them were about her creations. Most of the influential tweets were about the movie Fantastic beasts. There were some users who were accusing Rowling of Racism in the charecters she created, particularly for the 'nagini' role in the film Fantastic Beasts. 
+When we consider all of our findings together we can say that J.K Rowling is intertwined with her creations from the Harry Potter novels and the subsequent film adaptations. Many of the frequent terms are actors from the film adaptions and also the film "Fantastic Beasts and Where To Find Them: The Crimes of Grindewald" which is due to be released.
+
+We also note that because J.K. Rowling is a very well known author and has a very active twitter account there can be a huge shift of conversation topics in a short period of time and our analysis is based on only 1000 tweets from the 28th September 2018.
+
+Shared news articles and tweets about J.K. Rowling are likely to be retweeted heavily among clusters of users, particularly if a subset of twitter users consider a subject related to her find a particular announcement to be very good or very bad.
+
+There were some users who were accusing Rowling of Racism in the charecters she created, particularly for the 'nagini' role in the film Fantastic Beasts and other who think that Johnny Depp should not have been cast in Fantastic Beasts after being accused of assault by a former partner. On the other side of this is general excitement at the idea of actor Macauley Culkin being cast in the series.
